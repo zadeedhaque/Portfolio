@@ -558,6 +558,57 @@ dialog.case#mc-dlg{width:min(1040px,calc(100vw - 32px))}
 .steps4 span{display:block;margin-top:5px;font-size:13.5px;color:var(--muted);line-height:1.45}
 @media (max-width:860px){.steps4{grid-template-columns:1fr 1fr}}
 @media (max-width:520px){.steps4{grid-template-columns:1fr}}
+/* ---- 3D layer ---- */
+#hero3d{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.1s cubic-bezier(.32,.72,0,1);pointer-events:none}
+#hero3d.on{opacity:1}
+.hero.gl #blobs{opacity:.35;transition:opacity 1.1s cubic-bezier(.32,.72,0,1)}
+.p3d{position:absolute;inset:0;width:100%;height:100%;display:block}
+.proj .vis:has(.p3d){padding:0}
+.c3d{position:absolute;right:0;top:50%;transform:translateY(-50%);width:min(340px,42vw);aspect-ratio:1;pointer-events:none;opacity:.75;z-index:0}
+.contact .wrap,.contact .cbox{position:relative;z-index:1}
+@media (max-width:860px){.c3d{display:none}}
+
+/* CSS-3D marks on the skill cards */
+.skc{position:relative}
+.skc h3,.skc .chips{position:relative;z-index:1}
+.s3d{position:absolute;right:20px;bottom:18px;width:56px;height:56px;perspective:260px;pointer-events:none;z-index:0;opacity:.34;transition:opacity .5s cubic-bezier(.32,.72,0,1)}
+.skc:hover .s3d{opacity:.8}
+.s3d .o{position:absolute;inset:0;transform-style:preserve-3d;animation:s3dspin 18s linear infinite}
+.s3d .f{position:absolute;inset:0;border:1px solid var(--c);border-radius:5px}
+.s3d.cube .f:nth-child(1){transform:translateZ(28px)}
+.s3d.cube .f:nth-child(2){transform:rotateY(180deg) translateZ(28px)}
+.s3d.cube .f:nth-child(3){transform:rotateY(90deg) translateZ(28px)}
+.s3d.cube .f:nth-child(4){transform:rotateY(-90deg) translateZ(28px)}
+.s3d.cube .f:nth-child(5){transform:rotateX(90deg) translateZ(28px)}
+.s3d.cube .f:nth-child(6){transform:rotateX(-90deg) translateZ(28px)}
+.s3d.gyro .f{border-radius:50%}
+.s3d.gyro .f:nth-child(1){transform:rotateY(0deg)}
+.s3d.gyro .f:nth-child(2){transform:rotateY(60deg)}
+.s3d.gyro .f:nth-child(3){transform:rotateY(120deg)}
+.s3d.gyro .f:nth-child(4){transform:rotateX(90deg)}
+.s3d.gyro .f:nth-child(5),.s3d.gyro .f:nth-child(6){display:none}
+@keyframes s3dspin{to{transform:rotateX(360deg) rotateY(720deg)}}
+@media (max-width:520px){.s3d{width:46px;height:46px;right:14px;bottom:12px}}
+@media (prefers-reduced-motion:reduce){.s3d .o{animation:none;transform:rotateX(-22deg) rotateY(34deg)}}
+
+/* fallback when three.js can't load: the card visuals stay decorated, never blank */
+.no3d .p3d,.no3d .c3d{display:none}
+.no3d .proj .vis:has(.p3d),.proj .vis:has(.p3d){position:relative}
+.no3d .proj .vis::after{content:"";position:absolute;left:50%;top:50%;width:150px;height:150px;transform:translate(-50%,-50%);border-radius:50%;border:1px solid color-mix(in srgb,var(--c) 45%,transparent);box-shadow:0 0 0 22px -21px transparent,inset 0 0 0 22px transparent;background:radial-gradient(circle,transparent 30%,color-mix(in srgb,var(--c) 14%,transparent) 31% 32%,transparent 33%),radial-gradient(circle,transparent 48%,color-mix(in srgb,var(--c) 22%,transparent) 49% 50%,transparent 51%)}
+.no3d .proj .vis:not(:has(.p3d))::after{display:none}
+
+/* ---- button polish (no colour changes) ---- */
+.btn{transition:transform .5s cubic-bezier(.32,.72,0,1),box-shadow .5s cubic-bezier(.32,.72,0,1),border-color .5s cubic-bezier(.32,.72,0,1),background-color .5s cubic-bezier(.32,.72,0,1)}
+.btn:active{transform:scale(.975)}
+.btn .bic{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;margin-left:2px;margin-right:-4px;border-radius:50%;background:color-mix(in srgb,currentColor 16%,transparent);font-size:11px;line-height:1;font-style:normal;flex-shrink:0;transition:transform .5s cubic-bezier(.32,.72,0,1),background-color .5s cubic-bezier(.32,.72,0,1)}
+.btn:hover .bic{transform:translate(2px,-2px) scale(1.09);background:color-mix(in srgb,currentColor 28%,transparent)}
+.btn.a .bic,.btn.demo-btn .bic{background:color-mix(in srgb,var(--bg) 22%,transparent)}
+.btn.a:hover .bic,.btn.demo-btn:hover .bic{background:color-mix(in srgb,var(--bg) 34%,transparent)}
+.pbtns .btn .bic{width:19px;height:19px;font-size:10px}
+.hire{transition:transform .5s cubic-bezier(.32,.72,0,1),box-shadow .5s cubic-bezier(.32,.72,0,1)}
+.hire:hover{transform:translateY(-2px);box-shadow:0 10px 26px -10px var(--sun)}
+.hire:active{transform:scale(.975)}
+@media (prefers-reduced-motion:reduce){.btn,.btn .bic,.hire{transition:none}}
 .scroller{overflow:visible!important}
 @media (prefers-reduced-motion:reduce){.proj.feat.glow{animation:none}}
 
@@ -651,6 +702,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
 <main id="top">
 <header class="hero">
   <canvas id="blobs" aria-hidden="true"></canvas>
+  <canvas id="hero3d" aria-hidden="true"></canvas>
   <div class="grain" aria-hidden="true"></div>
   <div class="wrap">
     <div>
@@ -952,12 +1004,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
       </article>
       <article class="proj" style="--c:var(--teal)">
         <div class="vis">
-          <div class="v-aws">
-            <div>▣ Custom VPC · Internet Gateway</div>
-            <div class="r"><div class="n p">AZ-A · Bastion</div><div class="n p">AZ-B · EC2</div></div>
-            <div class="r"><div class="n q">Private · Test EC2</div><div class="n q">Private · MySQL</div></div>
-            <div style="color:var(--sun)">Security Groups · IAM</div>
-          </div>
+          <canvas class="p3d" data-scene="vpc" aria-label="Rotating diagram of two availability zones" role="img"></canvas>
         </div>
         <div class="body">
           <div class="k">Cloud · AWS</div>
@@ -968,18 +1015,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
       </article>
       <article class="proj" style="--c:var(--sun)">
         <div class="vis">
-          <svg viewBox="0 0 240 140" width="86%" role="img" aria-label="Flood raft illustration">
-            <g class="bob">
-              <rect x="70" y="72" width="100" height="8" rx="2" fill="#c79a5a"/>
-              <circle cx="82" cy="86" r="9" fill="#ff3b76"/><circle cx="108" cy="86" r="9" fill="#2fc4ad"/><circle cx="134" cy="86" r="9" fill="#ff3b76"/><circle cx="160" cy="86" r="9" fill="#2fc4ad"/>
-              <rect x="84" y="48" width="34" height="14" rx="1" fill="#1b2a5c" stroke="#2fc4ad" transform="rotate(-10 101 55)"/>
-              <line x1="101" y1="60" x2="101" y2="72" stroke="#a3a6c4"/>
-              <line x1="156" y1="72" x2="156" y2="36" stroke="#f5f1e8" stroke-width="1.5"/>
-              <circle cx="156" cy="33" r="4.5" fill="#ffd23f"><animate attributeName="opacity" values="1;.2;1" dur="1.2s" repeatCount="indefinite"/></circle>
-              <text x="163" y="36" font-size="9" fill="#ffd23f" font-family="monospace">SOS</text>
-            </g>
-            <path class="wave" d="M0 94 q15 -6 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 V140 H0Z" fill="rgba(47,196,173,.45)"/>
-          </svg>
+          <canvas class="p3d" data-scene="raft" aria-label="Animated raft floating on water" role="img"></canvas>
         </div>
         <div class="body">
           <div class="k">Design · Wadeye, NT</div>
@@ -990,7 +1026,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
       </article>
       <article class="proj" style="--c:var(--teal)">
         <div class="vis">
-<div class="v-code"><span class="k">&lt;section</span> <span class="a">id</span>=<span class="s">"about"</span><span class="k">&gt;</span><br>&nbsp;&nbsp;<span class="k">&lt;form</span> <span class="a">novalidate</span><span class="k">&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">&lt;input</span> <span class="a">required</span><span class="k">&gt;</span><br><span class="k">&lt;/section&gt;</span> <span class="cur"></span></div>
+<canvas class="p3d" data-scene="web" aria-label="Rotating stack of browser windows" role="img"></canvas>
         </div>
         <div class="body">
           <div class="k">Web · HTML &amp; CSS</div>
@@ -1007,14 +1043,14 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
   <div class="wrap">
     <div class="head"><div><div class="eyebrow">05 · Toolkit</div><h2 class="scr">What I <em>use</em></h2></div></div>
     <div class="sk">
-      <div class="skc" style="--c:var(--mag)"><h3>Code <small>07</small></h3><div class="chips"><span>TypeScript</span><span>JavaScript</span><span>Python</span><span>Java</span><span>C++</span><span>HTML</span><span>CSS</span></div></div>
-      <div class="skc" style="--c:var(--teal)"><h3>CS Core <small>07</small></h3><div class="chips"><span>OOP</span><span>Data structures</span><span>Algorithms</span><span>Linked lists</span><span>Trees &amp; BSTs</span><span>Sorting</span><span>File I/O</span></div></div>
-      <div class="skc" style="--c:var(--sun)"><h3>Web &amp; Apps <small>10</small></h3><div class="chips"><span>React</span><span>Next.js</span><span>Three.js</span><span>Phaser 3</span><span>Vitest</span><span>Prisma</span><span>Tailwind CSS</span><span>Vite</span><span>Node.js</span><span>REST &amp; server actions</span></div></div>
-      <div class="skc" style="--c:var(--plum)"><h3>Cloud &amp; Net <small>09</small></h3><div class="chips"><span>AWS</span><span>EC2</span><span>VPC</span><span>IAM</span><span>MySQL</span><span>TCP/IP</span><span>VLAN · 802.1Q</span><span>DHCP</span><span>Packet Tracer</span></div></div>
-      <div class="skc" style="--c:var(--sun)"><h3>AI &amp; Data <small>06</small></h3><div class="chips"><span>TensorFlow / Keras</span><span>OpenCV</span><span>scikit-learn</span><span>NumPy &amp; pandas</span><span>Gradio</span><span>Hugging Face Spaces</span></div></div>
-      <div class="skc" style="--c:var(--plum)"><h3>Tooling <small>06</small></h3><div class="chips"><span>Git &amp; GitHub</span><span>GitHub Actions</span><span>GitHub Pages</span><span>VS Code</span><span>Software architecture</span><span>Requirements analysis</span></div></div>
-      <div class="skc" style="--c:var(--teal)"><h3>Media <small>05</small></h3><div class="chips"><span>Premiere Pro</span><span>After Effects</span><span>Illustrator</span><span>Filmora</span><span>Presentation design</span></div></div>
-      <div class="skc" style="--c:var(--mag)"><h3>Streaming <small>05</small></h3><div class="chips"><span>Streamlabs</span><span>NVIDIA NVENC</span><span>DSLR as webcam</span><span>Lighting</span><span>Windows tuning</span></div></div>
+      <div class="skc" style="--c:var(--mag)"><div class="s3d cube" aria-hidden="true"><div class="o"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></div></div><h3>Code <small>07</small></h3><div class="chips"><span>TypeScript</span><span>JavaScript</span><span>Python</span><span>Java</span><span>C++</span><span>HTML</span><span>CSS</span></div></div>
+      <div class="skc" style="--c:var(--teal)"><div class="s3d gyro" aria-hidden="true"><div class="o"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></div></div><h3>CS Core <small>07</small></h3><div class="chips"><span>OOP</span><span>Data structures</span><span>Algorithms</span><span>Linked lists</span><span>Trees &amp; BSTs</span><span>Sorting</span><span>File I/O</span></div></div>
+      <div class="skc" style="--c:var(--sun)"><div class="s3d cube" aria-hidden="true"><div class="o"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></div></div><h3>Web &amp; Apps <small>10</small></h3><div class="chips"><span>React</span><span>Next.js</span><span>Three.js</span><span>Phaser 3</span><span>Vitest</span><span>Prisma</span><span>Tailwind CSS</span><span>Vite</span><span>Node.js</span><span>REST &amp; server actions</span></div></div>
+      <div class="skc" style="--c:var(--plum)"><div class="s3d gyro" aria-hidden="true"><div class="o"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></div></div><h3>Cloud &amp; Net <small>09</small></h3><div class="chips"><span>AWS</span><span>EC2</span><span>VPC</span><span>IAM</span><span>MySQL</span><span>TCP/IP</span><span>VLAN · 802.1Q</span><span>DHCP</span><span>Packet Tracer</span></div></div>
+      <div class="skc" style="--c:var(--sun)"><div class="s3d cube" aria-hidden="true"><div class="o"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></div></div><h3>AI &amp; Data <small>06</small></h3><div class="chips"><span>TensorFlow / Keras</span><span>OpenCV</span><span>scikit-learn</span><span>NumPy &amp; pandas</span><span>Gradio</span><span>Hugging Face Spaces</span></div></div>
+      <div class="skc" style="--c:var(--plum)"><div class="s3d gyro" aria-hidden="true"><div class="o"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></div></div><h3>Tooling <small>06</small></h3><div class="chips"><span>Git &amp; GitHub</span><span>GitHub Actions</span><span>GitHub Pages</span><span>VS Code</span><span>Software architecture</span><span>Requirements analysis</span></div></div>
+      <div class="skc" style="--c:var(--teal)"><div class="s3d cube" aria-hidden="true"><div class="o"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></div></div><h3>Media <small>05</small></h3><div class="chips"><span>Premiere Pro</span><span>After Effects</span><span>Illustrator</span><span>Filmora</span><span>Presentation design</span></div></div>
+      <div class="skc" style="--c:var(--mag)"><div class="s3d gyro" aria-hidden="true"><div class="o"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></div></div><h3>Streaming <small>05</small></h3><div class="chips"><span>Streamlabs</span><span>NVIDIA NVENC</span><span>DSLR as webcam</span><span>Lighting</span><span>Windows tuning</span></div></div>
     </div>
   </div>
 </section>
@@ -1144,6 +1180,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
 
 <section class="contact" id="contact" style="padding-top:0">
   <div class="giant" aria-hidden="true"><div class="track"><span>Let's talk</span><span>Let's build</span><span>Let's talk</span><span>Let's build</span><span>Let's talk</span><span>Let's build</span><span>Let's talk</span><span>Let's build</span><span>Let's talk</span><span>Let's build</span><span>Let's talk</span><span>Let's build</span></div></div>
+  <canvas class="c3d" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="cbox">
       <div>
@@ -2009,6 +2046,239 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
   document.querySelectorAll('.skc').forEach(c => c.addEventListener('pointermove', e => {
     const r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px');
   }));
+})();
+</script>
+
+<script>
+/* ---- button micro-architecture: wrap trailing glyphs in their own circle ---- */
+(() => {
+  const GLYPH = /\s*([↗↓→])\s*$/;
+  document.querySelectorAll('.btn').forEach(b => {
+    if (b.querySelector('.bic')) return;
+    for (let i = b.childNodes.length - 1; i >= 0; i--) {
+      const n = b.childNodes[i];
+      if (n.nodeType !== 3) continue;
+      const m = n.nodeValue.match(GLYPH);
+      if (!m) continue;
+      n.nodeValue = n.nodeValue.replace(GLYPH, '');
+      const ic = document.createElement('i');
+      ic.className = 'bic'; ic.setAttribute('aria-hidden', 'true'); ic.textContent = m[1];
+      b.appendChild(ic);
+      break;
+    }
+  });
+})();
+</script>
+<script type="module">
+(async () => {
+  const fail = () => document.documentElement.classList.add('no3d');
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const coarse = matchMedia('(pointer:coarse)').matches;
+  let THREE;
+  try {
+    THREE = await import('https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js');
+  } catch (e) { return fail(); }
+  try { const t = document.createElement('canvas');
+        if (!(t.getContext('webgl2') || t.getContext('webgl'))) return fail(); } catch (e) { return fail(); }
+
+  const C = { teal: 0x2fc4ad, sun: 0xffd23f, mag: 0xff3b76, plum: 0x7a4dff, ink: 0xf5f1e8 };
+  const DPR = () => Math.min(devicePixelRatio || 1, coarse ? 1.5 : 2);
+  const live = new Set();                   /* renderers currently on screen */
+  let paused = document.hidden;
+
+  /* ============ hero ============ */
+  function hero() {
+    const cv = document.getElementById('hero3d');
+    if (!cv) return;
+    const r = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, powerPreference: 'low-power' });
+    r.setPixelRatio(DPR());
+    const sc = new THREE.Scene();
+    const cam = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
+    cam.position.z = 14;
+
+    /* drifting point field */
+    const N = coarse ? 420 : 900, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
+    const pal = [C.teal, C.sun, C.mag, C.plum].map(h => new THREE.Color(h));
+    for (let i = 0; i < N; i++) {
+      const rad = 9 + Math.random() * 11, th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
+      pos[i*3] = rad * Math.sin(ph) * Math.cos(th);
+      pos[i*3+1] = rad * Math.sin(ph) * Math.sin(th) * 0.62;
+      pos[i*3+2] = rad * Math.cos(ph);
+      const c = pal[i % 4]; col[i*3] = c.r; col[i*3+1] = c.g; col[i*3+2] = c.b;
+    }
+    const pg = new THREE.BufferGeometry();
+    pg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    pg.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    const pts = new THREE.Points(pg, new THREE.PointsMaterial({
+      size: 0.085, vertexColors: true, transparent: true, opacity: 0.85,
+      sizeAttenuation: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    sc.add(pts);
+
+    /* floating wireframe solids */
+    const geos = [
+      new THREE.IcosahedronGeometry(2.1, 0), new THREE.TorusGeometry(1.6, 0.42, 10, 30),
+      new THREE.OctahedronGeometry(1.7, 0), new THREE.DodecahedronGeometry(1.5, 0),
+      new THREE.TetrahedronGeometry(1.8, 0) ];
+    const cols = [C.teal, C.mag, C.sun, C.plum, C.teal];
+    const solids = geos.map((g, i) => {
+      const m = new THREE.Mesh(g,
+        new THREE.MeshBasicMaterial({ color: cols[i], wireframe: true, transparent: true, opacity: 0.42 }));
+      m.position.set(Math.cos(i / 5 * Math.PI * 2) * 7.2, Math.sin(i / 5 * Math.PI * 2) * 3.6, -2 - i * 1.4);
+      m.userData.sp = 0.06 + i * 0.025; m.userData.ph = i * 1.3;
+      sc.add(m); return m;
+    });
+
+    let mx = 0, my = 0, tx = 0, ty = 0, W = 0, H = 0;
+    function size() {
+      const b = cv.getBoundingClientRect(), w = Math.round(b.width), h = Math.round(b.height);
+      if (!w || !h || (w === W && Math.abs(h - H) < 2)) return;
+      W = w; H = h; r.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
+    }
+    const hp = document.querySelector('.hero');
+    if (!coarse) hp.addEventListener('pointermove', e => {
+      const b = hp.getBoundingClientRect();
+      tx = ((e.clientX - b.left) / b.width - 0.5) * 2; ty = ((e.clientY - b.top) / b.height - 0.5) * 2;
+    }, { passive: true });
+
+    let raf = 0, on = true;
+    function frame(t) {
+      raf = 0; if (!on || paused) return;
+      size();
+      const s = t * 0.001;
+      if (coarse) { tx = Math.sin(s * 0.22) * 0.75; ty = Math.cos(s * 0.17) * 0.5; }
+      mx += (tx - mx) * 0.045; my += (ty - my) * 0.045;
+      cam.position.x = mx * 2.6; cam.position.y = -my * 1.7; cam.lookAt(0, 0, 0);
+      pts.rotation.y = s * 0.035; pts.rotation.x = Math.sin(s * 0.13) * 0.09;
+      solids.forEach(m => {
+        m.rotation.x += m.userData.sp * 0.006; m.rotation.y += m.userData.sp * 0.009;
+        m.position.y += Math.sin(s * 0.5 + m.userData.ph) * 0.0035;
+      });
+      r.render(sc, cam);
+      if (!reduce) raf = requestAnimationFrame(frame);
+    }
+    size(); r.render(sc, cam);
+    cv.classList.add('on'); hp.classList.add('gl');
+    if (!reduce) raf = requestAnimationFrame(frame);
+    const io = new IntersectionObserver(([e]) => {
+      on = e.isIntersecting;
+      if (on && !raf && !reduce && !paused) raf = requestAnimationFrame(frame);
+    });
+    io.observe(cv);
+    live.add({ get on() { return on; }, kick: () => { if (on && !raf && !reduce) raf = requestAnimationFrame(frame); } });
+    let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { size(); r.render(sc, cam); }, 150); }, { passive: true });
+  }
+
+  /* ============ small scenes ============ */
+  function build(kind) {
+    const g = new THREE.Group();
+    if (kind === 'vpc') {
+      [[-1.7, C.teal], [1.7, C.mag]].forEach(([x, c]) => {
+        const az = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3.4, 2.5),
+          new THREE.MeshBasicMaterial({ color: c, wireframe: true, transparent: true, opacity: 0.5 }));
+        az.position.x = x; g.add(az);
+        for (let i = 0; i < 2; i++) {
+          const n = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.62, 0.62),
+            new THREE.MeshBasicMaterial({ color: i ? C.sun : c, transparent: true, opacity: 0.9 }));
+          n.position.set(x, i ? 0.8 : -0.8, 0); g.add(n);
+        }
+      });
+      const gw = new THREE.Mesh(new THREE.OctahedronGeometry(0.72, 0),
+        new THREE.MeshBasicMaterial({ color: C.sun, wireframe: true }));
+      gw.position.y = 2.5; g.add(gw); g.userData.spin = 0.16;
+    } else if (kind === 'raft') {
+      const geo = new THREE.PlaneGeometry(11, 7, 26, 18);
+      const water = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: C.teal, wireframe: true, transparent: true, opacity: 0.4 }));
+      water.rotation.x = -Math.PI / 2.35; water.position.y = -1.1; g.add(water);
+      g.userData.water = geo; g.userData.base = geo.attributes.position.array.slice();
+      const raft = new THREE.Group();
+      const deck = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.18, 1.5), new THREE.MeshBasicMaterial({ color: 0xc79a5a }));
+      raft.add(deck);
+      for (let i = 0; i < 4; i++) {
+        const d = new THREE.Mesh(new THREE.CylinderGeometry(0.27, 0.27, 1.5, 10),
+          new THREE.MeshBasicMaterial({ color: i % 2 ? C.teal : C.mag }));
+        d.rotation.x = Math.PI / 2; d.position.set(-0.98 + i * 0.65, -0.24, 0); raft.add(d);
+      }
+      const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 1.5, 6), new THREE.MeshBasicMaterial({ color: C.ink }));
+      mast.position.set(0.85, 0.84, 0); raft.add(mast);
+      const led = new THREE.Mesh(new THREE.SphereGeometry(0.14, 10, 10), new THREE.MeshBasicMaterial({ color: C.sun, transparent: true }));
+      led.position.set(0.85, 1.6, 0); raft.add(led);
+      g.add(raft); g.userData.raft = raft; g.userData.led = led; g.userData.spin = 0;
+    } else if (kind === 'web') {
+      for (let i = 0; i < 3; i++) {
+        const w = new THREE.Mesh(new THREE.BoxGeometry(4.2, 2.7, 0.08),
+          new THREE.MeshBasicMaterial({ color: [C.teal, C.plum, C.sun][i], wireframe: true, transparent: true, opacity: 0.62 - i * 0.14 }));
+        w.position.set(i * 0.5 - 0.5, -i * 0.42 + 0.42, -i * 1.15); g.add(w);
+        const bar = new THREE.Mesh(new THREE.BoxGeometry(4.2, 0.36, 0.08),
+          new THREE.MeshBasicMaterial({ color: [C.teal, C.plum, C.sun][i], transparent: true, opacity: 0.34 }));
+        bar.position.set(w.position.x, w.position.y + 1.17, w.position.z); g.add(bar);
+      }
+      g.userData.spin = 0.1;
+    } else {                                  /* contact */
+      const k = new THREE.Mesh(new THREE.TorusKnotGeometry(2.2, 0.62, 128, 14),
+        new THREE.MeshBasicMaterial({ color: C.plum, wireframe: true, transparent: true, opacity: 0.4 }));
+      g.add(k);
+      const ico = new THREE.Mesh(new THREE.IcosahedronGeometry(3.3, 0),
+        new THREE.MeshBasicMaterial({ color: C.mag, wireframe: true, transparent: true, opacity: 0.22 }));
+      g.add(ico); g.userData.inner = k; g.userData.outer = ico; g.userData.spin = 0.12;
+    }
+    return g;
+  }
+
+  function mount(cv, kind, dist) {
+    const r = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, powerPreference: 'low-power' });
+    r.setPixelRatio(DPR());
+    const sc = new THREE.Scene(), cam = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+    cam.position.set(0, kind === 'raft' ? 1.6 : 0.6, dist); cam.lookAt(0, 0, 0);
+    const g = build(kind); sc.add(g);
+    let W = 0, H = 0, on = false, raf = 0;
+    function size() {
+      const b = cv.getBoundingClientRect(), w = Math.round(b.width), h = Math.round(b.height);
+      if (!w || !h || (w === W && h === H)) return;
+      W = w; H = h; r.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
+    }
+    function frame(t) {
+      raf = 0; if (!on || paused) return;
+      size();
+      const s = t * 0.001;
+      if (g.userData.spin) g.rotation.y += g.userData.spin * 0.01;
+      g.rotation.x = Math.sin(s * 0.28) * 0.14;
+      if (kind === 'raft') {
+        const a = g.userData.water.attributes.position, base = g.userData.base;
+        for (let i = 0; i < a.count; i++) {
+          const x = base[i*3], y = base[i*3+1];
+          a.array[i*3+2] = Math.sin(x * 0.72 + s * 1.5) * 0.36 + Math.cos(y * 0.6 + s * 1.1) * 0.24;
+        }
+        a.needsUpdate = true;
+        g.userData.raft.position.y = Math.sin(s * 1.5) * 0.3;
+        g.userData.raft.rotation.z = Math.sin(s * 1.5 + 0.6) * 0.09;
+        g.userData.led.material.opacity = 0.35 + Math.abs(Math.sin(s * 2.6)) * 0.65;
+        g.rotation.y = Math.sin(s * 0.2) * 0.22;
+      }
+      if (kind === 'contact') { g.userData.inner.rotation.z += 0.004; g.userData.outer.rotation.x -= 0.0022; }
+      r.render(sc, cam);
+      if (!reduce) raf = requestAnimationFrame(frame);
+    }
+    size(); r.render(sc, cam);
+    new IntersectionObserver(([e]) => {
+      on = e.isIntersecting;
+      if (on) { size(); r.render(sc, cam); if (!raf && !reduce && !paused) raf = requestAnimationFrame(frame); }
+    }, { rootMargin: '120px' }).observe(cv);
+    live.add({ kick: () => { if (on && !raf && !reduce) raf = requestAnimationFrame(frame); } });
+    let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { size(); r.render(sc, cam); }, 150); }, { passive: true });
+  }
+
+  hero();
+  document.querySelectorAll('.p3d').forEach(cv => {
+    const k = cv.dataset.scene;
+    mount(cv, k, k === 'raft' ? 9.5 : k === 'vpc' ? 10 : 9);
+  });
+  const cc = document.querySelector('.c3d');
+  if (cc && !coarse) mount(cc, 'contact', 11);
+
+  document.addEventListener('visibilitychange', () => {
+    paused = document.hidden;
+    if (!paused) live.forEach(l => l.kick());
+  });
 })();
 </script>
 
