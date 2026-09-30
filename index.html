@@ -885,12 +885,75 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .band{filter:none}
 }
 
-/* 3D is hero-only: hide the leftover project/contact canvases and show the flat fallback art */
+/* 3D is hero-only: leftover canvases stay hidden */
 .flat3d .p3d,.flat3d .c3d{display:none}
-.flat3d .proj .vis:has(.p3d){position:relative}
-.flat3d .proj .vis::after{content:"";position:absolute;left:50%;top:50%;width:150px;height:150px;transform:translate(-50%,-50%);border-radius:50%;border:1px solid color-mix(in srgb,var(--c,var(--plum)) 70%,transparent);box-shadow:0 0 44px -6px var(--c,var(--plum)),inset 0 0 34px -10px var(--c,var(--plum))}
-.flat3d .proj .vis:not(:has(.p3d))::after{display:none}
 #page3d{display:none}
+
+/* ===================== HTML/CSS animations in the project cards ===================== */
+.proj .vis:has(.ani){padding:0}
+.ani{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden}
+.ani svg{width:100%;height:100%;display:block}
+.ani-vpc{--k:var(--teal)}
+.ani-vpc .vpc{fill:rgba(47,196,173,.05);stroke:var(--teal);stroke-width:1.2;stroke-dasharray:6 5;opacity:.75;animation:aniMarch 14s linear infinite}
+.ani-vpc .az{fill:rgba(255,255,255,.035);stroke:rgba(255,255,255,.22);stroke-width:1}
+.ani-vpc .pub{fill:rgba(255,210,63,.09);stroke:rgba(255,210,63,.55);stroke-width:1}
+.ani-vpc .prv{fill:rgba(122,77,255,.12);stroke:rgba(160,130,255,.6);stroke-width:1}
+.ani-vpc .lab{font:600 8px ui-monospace,Menlo,monospace;fill:rgba(255,255,255,.62);letter-spacing:.06em}
+.ani-vpc .tiny{font:600 6.5px ui-monospace,Menlo,monospace;fill:#eaf7f4}
+.ani-vpc .flow{fill:none;stroke:var(--ice,#5be0ff);stroke-width:1.8;stroke-linecap:round;stroke-dasharray:3 7;filter:drop-shadow(0 0 3px var(--ice,#5be0ff));animation:aniDash 1s linear infinite}
+.ani-vpc .flow.f2{stroke:var(--sun);filter:drop-shadow(0 0 3px var(--sun));animation-duration:1.4s}
+.ani-vpc .flow.f3{stroke:var(--mag);filter:drop-shadow(0 0 3px var(--mag));animation-duration:1.8s;animation-direction:alternate}
+.ani-vpc .core{fill:#0c1a26;stroke:var(--teal);stroke-width:1.4}
+.ani-vpc .ring{fill:none;stroke:var(--teal);stroke-width:1.2;transform-box:fill-box;transform-origin:center;animation:aniRing 2.2s ease-out infinite}
+.ani-vpc .box{stroke-width:1;animation:aniGlow 3s ease-in-out infinite}
+.ani-vpc .b1{fill:rgba(255,210,63,.22);stroke:var(--sun)}
+.ani-vpc .b2{fill:rgba(160,130,255,.22);stroke:#b39bff}
+.ani-vpc .d1{animation-delay:.3s}.ani-vpc .d2{animation-delay:.9s}.ani-vpc .d3{animation-delay:1.5s}.ani-vpc .d4{animation-delay:2.1s}
+.ani-vpc .db circle{fill:rgba(255,59,118,.24);stroke:var(--mag);stroke-width:1.2;transform-box:fill-box;transform-origin:center;animation:aniBeat 1.8s ease-in-out infinite}
+.ani-vpc .db.d5 circle{animation-delay:.9s}
+
+.ani-raft svg{filter:none}
+.ani-raft .sun{fill:var(--sun);filter:drop-shadow(0 0 10px var(--sun))}
+.ani-raft .sunr{fill:none;stroke:var(--sun);stroke-width:1;transform-box:fill-box;transform-origin:center;animation:aniRing 4s ease-out infinite}
+.ani-raft .wv{animation:aniWave 9s linear infinite}
+.ani-raft .wv path{fill:color-mix(in srgb,var(--sun) 24%,transparent)}
+.ani-raft .w2{animation-duration:6.5s;animation-direction:reverse}.ani-raft .w2 path{fill:color-mix(in srgb,var(--sun) 40%,#7a4dff 12%)}
+.ani-raft .w3{animation-duration:5s}.ani-raft .w3 path{fill:color-mix(in srgb,var(--sun) 62%,var(--bg) 20%);opacity:.9}
+.ani-raft .raft{transform-box:fill-box;transform-origin:50% 100%;animation:aniBob 4.2s ease-in-out infinite}
+.ani-raft .deck{fill:#d9b45a}.ani-raft .lash{stroke:#7a5a1e;stroke-width:1.4;fill:none}
+.ani-raft .drum{fill:#2fc4ad;stroke:#0b3d36;stroke-width:1}
+.ani-raft .mast{fill:#e9e2d0}
+.ani-raft .panel rect{fill:#1a4d8f;stroke:#7fd4ff;stroke-width:1}.ani-raft .panel path{stroke:#7fd4ff;stroke-width:.8}
+.ani-raft .panel{transform-box:fill-box;transform-origin:50% 50%;transform:rotate(-7deg)}
+.ani-raft .beacon{fill:var(--mag);filter:drop-shadow(0 0 6px var(--mag));animation:aniGlow 1.2s ease-in-out infinite}
+.ani-raft .sos{fill:none;stroke:var(--mag);stroke-width:1.4;transform-box:fill-box;transform-origin:center;animation:aniSos 2.4s ease-out infinite}
+.ani-raft .s2{animation-delay:1.2s}
+
+.ani-web .stack{position:relative;width:min(280px,72%);aspect-ratio:1.55}
+.ani-web .win{position:absolute;width:74%;height:74%;border-radius:12px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1px solid color-mix(in srgb,var(--wc) 70%,transparent);box-shadow:0 14px 30px -14px rgba(0,0,0,.8),0 0 26px -10px var(--wc),inset 0 1px 0 rgba(255,255,255,.3);padding:22px 12px 10px;backdrop-filter:blur(3px);animation:aniFloat 5s ease-in-out infinite}
+.ani-web .win i{position:absolute;top:8px;left:10px;width:6px;height:6px;border-radius:50%;background:var(--wc);opacity:.9}
+.ani-web .win i:nth-child(2){left:19px;opacity:.6}.ani-web .win i:nth-child(3){left:28px;opacity:.35}
+.ani-web .w-a{--wc:var(--mag);left:0;top:0;animation-delay:-1.6s}
+.ani-web .w-b{--wc:var(--sun);left:13%;top:13%;animation-delay:-.8s}
+.ani-web .w-c{--wc:var(--teal);left:26%;top:26%}
+.ani-web .ln{display:block;height:6px;border-radius:3px;margin-bottom:7px;background:linear-gradient(90deg,var(--wc),color-mix(in srgb,var(--wc) 20%,transparent));transform-origin:left;animation:aniType 4s ease-in-out infinite}
+.ani-web .l1{width:70%}.ani-web .l2{width:92%;animation-delay:.35s}.ani-web .l3{width:54%;animation-delay:.7s}
+.ani-web .hero{position:absolute;left:12px;right:12px;bottom:10px;height:26%;border-radius:7px;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%),color-mix(in srgb,var(--wc) 26%,transparent);background-size:220% 100%,100%;animation:aniShimmer 2.6s linear infinite}
+.ani-web .caret{position:absolute;left:calc(12px + 54%);top:62px;width:2px;height:10px;background:var(--wc);animation:aniBlink 1s steps(2) infinite}
+
+@keyframes aniDash{to{stroke-dashoffset:-20}}
+@keyframes aniMarch{to{stroke-dashoffset:-44}}
+@keyframes aniRing{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+@keyframes aniSos{0%{transform:scale(1);opacity:.95}100%{transform:scale(4.2);opacity:0}}
+@keyframes aniGlow{0%,100%{opacity:.7}50%{opacity:1;filter:brightness(1.35)}}
+@keyframes aniBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@keyframes aniWave{to{transform:translateX(-400px)}}
+@keyframes aniBob{0%,100%{transform:translateY(-3px) rotate(-2.5deg)}50%{transform:translateY(5px) rotate(2.5deg)}}
+@keyframes aniFloat{0%,100%{transform:translateY(-5px)}50%{transform:translateY(6px)}}
+@keyframes aniType{0%{transform:scaleX(0);opacity:.4}35%,80%{transform:scaleX(1);opacity:1}100%{transform:scaleX(0);opacity:.4}}
+@keyframes aniShimmer{to{background-position:-220% 0,0 0}}
+@keyframes aniBlink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.ani *{animation:none!important}.ani-web .ln{transform:none}}
 </style>
 
 </head>
@@ -1216,7 +1279,27 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       </article>
       <article class="proj" style="--c:var(--teal)">
         <div class="vis">
-          <canvas class="p3d" data-scene="vpc" aria-label="Rotating diagram of two availability zones" role="img"></canvas>
+          <div class="ani ani-vpc" role="img" aria-label="Animated diagram: internet gateway routing traffic to public subnets across two availability zones, with private subnets and database replication">
+<svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  <rect class="vpc" x="14" y="12" width="372" height="188" rx="14"/>
+  <text class="lab" x="26" y="27">VPC · 10.0.0.0/16</text>
+  <rect class="az" x="30" y="50" width="160" height="140" rx="10"/><text class="lab" x="40" y="64">AZ-a</text>
+  <rect class="az" x="210" y="50" width="160" height="140" rx="10"/><text class="lab" x="220" y="64">AZ-b</text>
+  <rect class="pub" x="40" y="72" width="140" height="40" rx="7"/><rect class="pub" x="220" y="72" width="140" height="40" rx="7"/>
+  <rect class="prv" x="40" y="124" width="140" height="56" rx="7"/><rect class="prv" x="220" y="124" width="140" height="56" rx="7"/>
+  <path class="flow f1" d="M200 46 C200 60 110 58 110 76"/><path class="flow f1" d="M200 46 C200 60 290 58 290 76"/>
+  <path class="flow f2" d="M110 100 V134"/><path class="flow f2" d="M290 100 V134"/>
+  <path class="flow f3" d="M164 152 H228"/>
+  <g class="node"><circle class="ring" cx="200" cy="38" r="9"/><circle class="core" cx="200" cy="38" r="8"/><text class="tiny" x="200" y="41" text-anchor="middle">IGW</text></g>
+  <rect class="box b1" x="94" y="80" width="32" height="18" rx="4"/><text class="tiny" x="110" y="92" text-anchor="middle">bastion</text>
+  <rect class="box b1" x="274" y="80" width="32" height="18" rx="4"/><text class="tiny" x="290" y="92" text-anchor="middle">NAT</text>
+  <rect class="box b2 d1" x="52" y="140" width="34" height="24" rx="5"/><rect class="box b2 d2" x="92" y="140" width="34" height="24" rx="5"/>
+  <rect class="box b2 d3" x="262" y="140" width="34" height="24" rx="5"/><rect class="box b2 d4" x="302" y="140" width="34" height="24" rx="5"/>
+  <text class="tiny" x="69" y="155" text-anchor="middle">EC2</text><text class="tiny" x="109" y="155" text-anchor="middle">EC2</text>
+  <text class="tiny" x="279" y="155" text-anchor="middle">EC2</text><text class="tiny" x="319" y="155" text-anchor="middle">EC2</text>
+  <g class="db"><circle cx="152" cy="152" r="11"/><text class="tiny" x="152" y="155" text-anchor="middle">SQL</text></g>
+  <g class="db d5"><circle cx="240" cy="152" r="11"/><text class="tiny" x="240" y="155" text-anchor="middle">SQL</text></g>
+</svg></div>
         </div>
         <div class="body">
           <div class="k">Cloud · AWS</div>
@@ -1227,7 +1310,20 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       </article>
       <article class="proj" style="--c:var(--sun)">
         <div class="vis">
-          <canvas class="p3d" data-scene="raft" aria-label="Animated raft floating on water" role="img"></canvas>
+          <div class="ani ani-raft" role="img" aria-label="Animated flood-resilience raft bobbing on waves with a signalling beacon">
+<svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <circle class="sun" cx="336" cy="46" r="15"/><circle class="sunr" cx="336" cy="46" r="15"/>
+  <g class="wv w1"><path d="M0 128 q50 -16 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V210 H0Z"/></g>
+  <g class="raft">
+    <rect class="mast" x="198" y="70" width="3.5" height="46" rx="1.5"/>
+    <g class="panel"><rect x="172" y="70" width="56" height="9" rx="2"/><path d="M182 70 V79 M192 70 V79 M202 70 V79 M212 70 V79 M222 70 V79"/></g>
+    <circle class="beacon" cx="200" cy="62" r="4"/><circle class="sos s1" cx="200" cy="62" r="4"/><circle class="sos s2" cx="200" cy="62" r="4"/>
+    <rect class="deck" x="146" y="112" width="108" height="8" rx="2"/><path class="lash" d="M162 112 V120 M182 112 V120 M202 112 V120 M222 112 V120 M242 112 V120"/>
+    <rect class="drum" x="150" y="120" width="22" height="16" rx="6"/><rect class="drum" x="178" y="120" width="22" height="16" rx="6"/><rect class="drum" x="206" y="120" width="22" height="16" rx="6"/><rect class="drum" x="228" y="120" width="22" height="16" rx="6"/>
+  </g>
+  <g class="wv w2"><path d="M0 140 q50 -14 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V210 H0Z"/></g>
+  <g class="wv w3"><path d="M0 154 q50 -12 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V210 H0Z"/></g>
+</svg></div>
         </div>
         <div class="body">
           <div class="k">Design · Wadeye, NT</div>
@@ -1238,7 +1334,12 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       </article>
       <article class="proj" style="--c:var(--teal)">
         <div class="vis">
-<canvas class="p3d" data-scene="web" aria-label="Rotating stack of browser windows" role="img"></canvas>
+<div class="ani ani-web" role="img" aria-label="Animated stack of browser windows being filled with content">
+<div class="stack">
+  <div class="win w-a"><i></i><i></i><i></i><b class="ln l1"></b><b class="ln l2"></b><b class="ln l3"></b></div>
+  <div class="win w-b"><i></i><i></i><i></i><b class="ln l1"></b><b class="ln l2"></b><b class="ln l3"></b></div>
+  <div class="win w-c"><i></i><i></i><i></i><b class="ln l1"></b><b class="ln l2"></b><b class="ln l3"></b><b class="hero"></b></div>
+</div></div>
         </div>
         <div class="body">
           <div class="k">Web · HTML &amp; CSS</div>
