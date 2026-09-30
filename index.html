@@ -852,6 +852,21 @@ dialog.case{background:color-mix(in srgb,var(--bg2) 86%,transparent)!important;b
 .cbox{--nc:var(--mag)}
 .tilting{will-change:transform;transition:transform .12s ease-out,box-shadow .35s ease!important}
 @media (hover:none),(prefers-reduced-motion:reduce){.tilting{transition:none!important}}
+
+/* ===================== page-wide 3D layer + hero touch + mobile hero order ===================== */
+#page3d{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
+#page3d.on{opacity:1}
+.no3d #page3d{display:none}
+.hero{touch-action:pan-y}
+@media (max-width:980px){
+  .hero .card3d{order:-1}
+  .hero .hcopy{display:flex;flex-direction:column}
+  .hero .hcopy .big{order:-1}
+  .hero .hcopy .pill{align-self:flex-start}
+  .hero .hcopy .hsoc{order:9}
+}
+@media (max-width:700px){ #page3d.on{opacity:.8} }
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 </style>
 
 </head>
@@ -867,6 +882,7 @@ dialog.case{background:color-mix(in srgb,var(--bg2) 86%,transparent)!important;b
   </div>
 </nav>
 
+<canvas id="page3d" aria-hidden="true"></canvas>
 <main id="top">
 <header class="hero">
   <canvas id="blobs" aria-hidden="true"></canvas>
@@ -2593,6 +2609,38 @@ void main(){
       add({ geo:'plane', col:C.teal, pos:[-.5,.9,-1.2], scale:[3.4,2.1,1], rot:[0,.12,0], spin:[0,0,0], tex:'screen', emis:.12, alpha:.95, glow:1.3, float:.18, pick:1 });
       add({ geo:'plane', col:C.sun, pos:[0,0,0], scale:[3.4,2.1,1], rot:[0,.12,0], spin:[0,0,0], tex:'screen3', emis:.12, alpha:.95, glow:1.3, float:.2, pick:1 });
       add({ geo:'plane', col:C.mag, pos:[.5,-.9,1.2], scale:[3.4,2.1,1], rot:[0,.12,0], spin:[0,0,0], tex:'screen2', emis:.12, alpha:.95, glow:1.3, float:.22, pick:1 });
+    } else if (SC === 'page') {
+      /* page-wide scene: pixel-scaled props anchored to sections, camera follows scroll */
+      const N = opts.pageItems || [];
+      const K = {
+        cube:   [{ g:'box',  c:'*', sc:[.62,.62,.62], sp:[.16,.22,.06], em:.4,  gl:.5 }],
+        octa:   [{ g:'octa', c:'*', sc:[.42,.42,.42], sp:[.1,.16,0], em:.28, gl:.55 }],
+        tetra:  [{ g:'tetra',c:'*', sc:[.42,.42,.42], sp:[-.1,.14,.05], em:.28, gl:.55 }],
+        code:   [{ g:'box',  c:'plum', sc:[.9,.9,.9], sp:[.05,.13,0], tex:'code', em:.18, gl:.5, r:[.4,.7,.15] }],
+        ai:     [{ g:'box',  c:'ice',  sc:[.9,.9,.9], sp:[.04,-.11,0], tex:'ai', em:.18, gl:.5, r:[.3,-.5,-.1] }],
+        ae:     [{ g:'box',  c:'plum', sc:[.9,.9,.26], sp:[.02,.05,0], tex:'ae', em:.2, gl:.5, r:[.2,-.4,.15] }],
+        knot:   [{ g:'knot', c:'mag',  sc:[.5,.5,.5], sp:[.03,.06,.01], em:.4, gl:.8 }],
+        ring:   [{ g:'ring', c:'teal', sc:[.5,.5,.5], sp:[.03,.09,0], em:.22, al:.8, gl:0, r:[.9,.3,0] }],
+        screen: [{ g:'plane',c:'teal', sc:[1.5,.95,1], sp:[0,0,0], tex:'screen',  em:.1, al:.95, gl:.55, r:[.05,-.5,.03] }],
+        screen2:[{ g:'plane',c:'mag',  sc:[1.4,.9,1],  sp:[0,0,0], tex:'screen2', em:.1, al:.95, gl:.5, r:[.05,.5,-.04] }],
+        laptop: [{ g:'plane',c:'teal', sc:[1.6,1,1], sp:[0,0,0], tex:'laptop', em:.16, al:1, gl:.6, r:[-.12,-.42,.02], o:[0,.12,0] },
+                 { g:'slab', c:'plum', sc:[1.6,1,.9], sp:[0,0,0], em:.2, al:.9, gl:0, r:[.04,-.42,0], o:[0,-.4,.25] }],
+        cam:    [{ g:'box',  c:'ice',  sc:[.85,.55,.5], sp:[.03,.06,0], em:.2, gl:.5, r:[.15,-.5,.05] },
+                 { g:'cyl',  c:'mag',  sc:[.35,.3,.35], sp:[0,0,0], em:.3, gl:0, r:[1.4,-.5,0], o:[-.13,0,.34] }],
+        pad:    [{ g:'box',  c:'sun',  sc:[1,.26,.46], sp:[.02,.05,0], em:.22, gl:.5, r:[.7,-.5,.2] },
+                 { g:'cyl',  c:'sun',  sc:[.26,.34,.26], sp:[0,0,0], em:.25, gl:0, r:[.6,-.5,.2], o:[-.36,.1,.1] },
+                 { g:'cyl',  c:'sun',  sc:[.26,.34,.26], sp:[0,0,0], em:.25, gl:0, r:[.6,-.5,.2], o:[.36,-.1,-.1] }],
+        books:  [0,1,2].map(i => ({ g:'book', c:['teal','sun','mag'][i], sc:[1.1,.6,.9], sp:[0,0,0], tex:'book'+i, em:.14, gl:i?0:.4, r:[0,.3,-.03], o:[0,-.3+i*.27,0] })),
+        rock:   [{ g:'rock0', c:'*', sc:[.5,.36,.5], sp:[.01,.03,0], em:0, al:.55, gl:.3 }],
+        rock2:  [{ g:'rock2', c:'*', sc:[.5,.36,.5], sp:[.01,.03,0], em:0, al:.55, gl:.3 }]
+      };
+      const CN = { teal:C.teal, sun:C.sun, mag:C.mag, plum:C.plum, ice:C.ice };
+      N.forEach((it, idx) => (K[it.kind] || K.cube).forEach(pt => {
+        const s = it.s, o = pt.o || [0,0,0];
+        add({ geo:pt.g, col: pt.c === '*' ? CN[it.c || 'teal'] : CN[pt.c], pos:[0,0,0], rot: pt.r || [Math.random()*3, Math.random()*3, 0],
+          scale: pt.sc.map(v => v * s), spin: pt.sp, tex: pt.tex || null, emis: pt.em + .22, alpha: Math.min(1, (pt.al == null ? .95 : pt.al) * (it.a || 1)),
+          glow: pt.gl * s * .85, float: s * .06, phase: idx * 1.7, item: it, lo: [o[0]*s, o[1]*s, o[2]*s] });
+      }));
     } else if (SC === 'contact') {
       add({ geo:'knot', col:C.mag, pos:[0,0,0], scale:[1.7,1.7,1.7], spin:[.05,.08,.02], emis:.45, glow:2.4, float:.15 });
       add({ geo:'ring', col:C.teal, pos:[0,0,0], scale:[1.9,1.9,1.9], rot:[1.1,.4,0], spin:[.03,.09,0], emis:.25, alpha:.8, glow:0, float:0 });
@@ -2662,7 +2710,7 @@ void main(){
     }
 
     let shX = 0, shY = 0;
-    const proj = () => M.persp((opts.fov || 43) * Math.PI/180, aspect, .1, 120, shX, shY);
+    const proj = () => M.persp((opts.fov || 43) * Math.PI/180, aspect, opts.near || .1, opts.far || 120, shX, shY);
 
     function project(p, pv) {
       const x = pv[0]*p[0]+pv[4]*p[1]+pv[8]*p[2]+pv[12];
@@ -2696,8 +2744,26 @@ void main(){
       }
       if (!L && opts.fit) R0 *= Math.min(1.6, Math.max(1, .95/aspect));
       const R = R0, k = opts.px == null ? 1 : opts.px;
-      const eye = [Math.sin(orbit)*R + px*1.7*k, cam[1] - py*1.1*k + (opts.camY || 0) + (D ? Math.min(D.s, 1.2) * 1.8 : 0), Math.cos(orbit)*R];
-      const view = M.look(eye[0], eye[1], eye[2], 0, 0, 0);
+      const PG = opts.pageInfo ? opts.pageInfo() : null;
+      let eye, camy = 0;
+      if (PG) {
+        R0 = (H/2) / Math.tan((opts.fov || 43) * Math.PI/360);
+        camy = -(PG.y + H/2);
+        const narrow = W < 700, mid = W < 1000;
+        objs.forEach(o => {
+          const it = o.item, sec = PG.secs[it.sec];
+          if (!sec) { o.hidden = true; return; }
+          const z = it.z || 0, kk = (R0 - z) / R0;
+          const inset = it.s * (narrow ? .1 + .3*it.ix : mid ? .3 + .4*it.ix : .62 + .7*it.ix);
+          o.pos[0] = it.side * (W/2 - inset) * kk + o.lo[0];
+          o.pos[1] = -(sec[0] + it.dy * sec[1]) + o.lo[1];
+          o.pos[2] = z + o.lo[2];
+          o.hidden = (narrow && it.d) || Math.abs((o.pos[1] - camy) * R0 / (R0 - z)) > H/2 + it.s * 2.5;
+        });
+        eye = [px * 90, camy - py * 50, R0];
+      } else eye = [Math.sin(orbit)*R + px*1.7*k, cam[1] - py*1.1*k + (opts.camY || 0) + (D ? Math.min(D.s, 1.2) * 1.8 : 0), Math.cos(orbit)*R];
+      const view = PG ? M.look(eye[0], eye[1], eye[2], 0, camy, 0) : M.look(eye[0], eye[1], eye[2], 0, 0, 0);
+      const scrollSpin = PG ? PG.y * .0016 : 0;
       const P = proj(), pv = M.mul(P, view);
 
       /* hover pick */
@@ -2770,7 +2836,7 @@ void main(){
         const sc = 1 + o.hoverK * .16;
         const sp = 1 + o.hoverK * 2.2;
         const m = M.trs(o.pos[0], yy, o.pos[2],
-          o.rot[0] + o.spin[0]*t*sp, o.rot[1] + o.spin[1]*t*sp, o.rot[2] + o.spin[2]*t*sp,
+          o.rot[0] + o.spin[0]*t*sp + scrollSpin*.6, o.rot[1] + o.spin[1]*t*sp + scrollSpin, o.rot[2] + o.spin[2]*t*sp,
           o.scale[0]*sc, o.scale[1]*sc, o.scale[2]*sc);
         gl.uniformMatrix4fv(U.uModel, false, m);
         gl.uniform3fv(U.uColor, new Float32Array(o.col));
@@ -2792,12 +2858,13 @@ void main(){
     canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); api.stop(); canvas.style.opacity = 0; if (opts.onLost) opts.onLost(); });
     resize();
     const host = opts.host || canvas.parentElement;
-    if (host && !opts.noPointer) host.addEventListener('pointermove', e => {
+    if (host && !opts.noPointer) ['pointermove','pointerdown'].forEach(ev => host.addEventListener(ev, e => {
       const r = canvas.getBoundingClientRect();
       mouseX = e.clientX - r.left; mouseY = e.clientY - r.top;
       tpx = (mouseX / Math.max(1, r.width) - .5) * 2;
       tpy = (mouseY / Math.max(1, r.height) - .5) * 2;
-    }, { passive: true });
+    }, { passive: true }));
+    if (host && !opts.noPointer) host.addEventListener('pointercancel', () => { mouseX = mouseY = -1e4; tpx = tpy = 0; }, { passive: true });
     if (host) host.addEventListener('pointerleave', () => { mouseX = mouseY = -1e4; tpx = tpy = 0; }, { passive: true });
 
     const api = {
@@ -2842,7 +2909,7 @@ window.CUTOUT_WEBP="data:image/webp;base64,UklGRm73AgBXRUJQVlA4WAoAAAAQAAAA/wMA2
   }
   document.addEventListener('visibilitychange', () => live.forEach(f => f()));
 
-  /* hero: centred cutout + neon props. No mouse input at all: the scene reacts to scroll only */
+  /* hero: centred cutout + neon props. Reacts to mouse and touch only, never to scroll */
   const cv = document.getElementById('hero3d'), hp = document.querySelector('.hero');
   if (cv && hp) {
     const wrapEl = hp.querySelector('.wrap'), stage = document.getElementById('card'), hats = hp.querySelector('.hats');
@@ -2857,23 +2924,53 @@ window.CUTOUT_WEBP="data:image/webp;base64,UklGRm73AgBXRUJQVlA4WAoAAAAQAAAA/wMA2
           off: { scrM: [10.4, 4.4], scrT: [-.6, 2.4], lap: [-3.0, 3.6], cam: [2.4, .6], ai: [-3.4, 1.8], pad: [-2.6, -.8], ae: [.3, .4] } };
       }
       const r = stage.getBoundingClientRect();
-      return { x: r.left - c.left + r.width / 2, y: r.top - c.top + r.height / 2, unit: Math.min(r.width / 10.8, r.height / 12.6), sx: .62, av: [0, -3.4, 15] };
+      return { x: r.left - c.left + r.width / 2, y: r.top - c.top + r.height / 2, unit: Math.min(r.width / 10.8, r.height / 12.6), sx: .62, av: [0, MOBAV[0], MOBAV[1]] };
     };
-    const drive = () => { if (reduce) return { s: 0, t: 0 }; const r = hp.getBoundingClientRect(); const s = Math.max(0, -r.top / Math.max(1, r.height)); return { s, t: s * 9 }; };
-    let vis = true, tick = 0;
-    const H = (() => { try { return NeonHero.initScene(cv, { scene: 'hero', S: .8, Sx: .62, Sy: 1, bulge: .16, maxDpr: coarse ? 1.5 : 2,
-      cutout: window.CUTOUT_WEBP, avatarScale: 12.5, avatarPos: [.2, -3.2, 0], noPointer: 1, onDemand: 1, drive, layout,
-      onAvatar: ok => { if (ok) { hp.classList.add('av'); H && H.draw(); } }, onLost: fail }); } catch (e) { return null; } })();
-    if (H) {
-      cv.classList.add('on'); hp.classList.add('gl');
-      const draw = () => { if (vis) H.draw(); };
-      new IntersectionObserver(es => { vis = es[0].isIntersecting; if (vis) H.draw(); }, { rootMargin: '200px' }).observe(hp);
-      addEventListener('scroll', draw, { passive: true });
-      addEventListener('resize', () => { clearTimeout(tick); tick = setTimeout(draw, 80); }, { passive: true });
-      addEventListener('load', draw);
-      document.fonts && document.fonts.ready && document.fonts.ready.then(draw);
-      [150, 600, 1500].forEach(ms => setTimeout(draw, ms));
-      H.draw();
+    const MOBAV = [-3.4, 15];
+    const H = mount(cv, { scene: 'hero', S: .8, Sx: .62, Sy: 1, bulge: .16, cutout: window.CUTOUT_WEBP, avatarScale: 12.5, avatarPos: [.2, -3.2, 0],
+      host: hp, blocked: () => true, layout, auto: true,
+      onAvatar: ok => { if (ok) { hp.classList.add('av'); if (reduce && H) H.once(); } } });
+    if (H) { cv.classList.add('on'); hp.classList.add('gl'); }
+  }
+
+  /* page-wide 3D: neon props anchored to every section; the camera follows scroll */
+  const pg = document.getElementById('page3d');
+  if (pg) {
+    const ids = ['about', 'roles', 'journey', 'work', 'skills', 'reels', 'gaming', 'hobbies', 'contact'];
+    let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const cols = ['teal', 'sun', 'mag', 'plum', 'ice'];
+    const items = []; let side = 1;
+    const T = (sec, list) => list.forEach(([kind, dy, sd, s, ix, z, d]) => items.push({ kind, sec, dy, side: sd, s: Math.round(s * 1.6), ix: ix == null ? rnd() : ix, z: z == null ? Math.round(rnd() * 200 - 140) : z, c: cols[items.length % 5], a: 1, d: !!d }));
+    T('about',   [['code', .14, 1, 78], ['ring', .5, -1, 105, .3], ['ai', .82, 1, 66, null, null, 1]]);
+    T('roles',   [['knot', .14, -1, 98], ['laptop', .55, 1, 104], ['octa', .88, -1, 56, null, null, 1]]);
+    T('journey', [['books', .22, 1, 92], ['ring', .62, -1, 100], ['tetra', .92, 1, 54, null, null, 1]]);
+    T('work',    [['screen', .05, -1, 110], ['ae', .16, 1, 84], ['cam', .29, -1, 100], ['octa', .41, 1, 70, null, null, 1], ['screen2', .52, -1, 106],
+                  ['rock', .63, 1, 96], ['pad', .74, -1, 100], ['knot', .85, 1, 82], ['tetra', .95, -1, 60, null, null, 1]]);
+    T('skills',  [['octa', .2, -1, 92], ['ai', .55, 1, 76], ['ring', .88, -1, 86]]);
+    T('reels',   [['cam', .25, 1, 104], ['ring', .7, -1, 96], ['cube', .92, 1, 46, null, null, 1]]);
+    T('gaming',  [['pad', .28, -1, 106], ['cube', .62, 1, 52], ['octa', .9, -1, 62, null, null, 1]]);
+    T('hobbies', [['rock', .08, 1, 96], ['tetra', .28, -1, 70], ['knot', .5, 1, 88], ['rock2', .72, -1, 90], ['cube', .93, 1, 48, null, null, 1]]);
+    T('contact', [['ring', .25, -1, 96], ['octa', .72, 1, 74]]);
+    /* small fillers so the gaps between the big props are never empty */
+    ids.forEach(id => { const n = id === 'work' ? 7 : 2; for (let i = 0; i < n; i++) T(id, [[['cube', 'octa', 'tetra'][(i + id.length) % 3], (i + .5) / n + (rnd() - .5) * .06, i % 2 ? 1 : -1, 26 + Math.round(rnd() * 20), rnd(), Math.round(rnd() * 200 - 160), 1]]); });
+    const secs = {};
+    const measure = () => { ids.forEach(id => { const e = document.getElementById(id); if (e) { const r = e.getBoundingClientRect(); secs[id] = [r.top + scrollY, r.height]; } }); };
+    measure();
+    let PG = null;
+    try { PG = NeonHero.initScene(pg, { scene: 'page', pageItems: items, fov: 43, near: 60, far: 5000, maxDpr: coarse ? 1.25 : 1.6, host: document.body,
+      auto: false, px: 1, pageInfo: () => ({ y: scrollY, secs }), onLost: fail }); } catch (e) { PG = null; }
+    if (PG) {
+      pg.classList.add('on');
+      const sync = () => { if (document.hidden) PG.stop(); else reduce ? PG.once() : PG.start(); };
+      document.addEventListener('visibilitychange', sync);
+      let mt; const remeasure = () => { clearTimeout(mt); mt = setTimeout(() => { measure(); if (reduce) PG.once(); }, 120); };
+      addEventListener('resize', remeasure, { passive: true });
+      addEventListener('load', remeasure);
+      document.fonts && document.fonts.ready && document.fonts.ready.then(remeasure);
+      if (window.ResizeObserver) new ResizeObserver(remeasure).observe(document.body);
+      [400, 1200, 2500].forEach(ms => setTimeout(remeasure, ms));
+      if (reduce) { let raf = 0; addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; PG.once(); }); }, { passive: true }); }
+      sync();
     }
   }
 
