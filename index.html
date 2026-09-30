@@ -884,6 +884,13 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   nav .wrap{background:color-mix(in srgb,var(--bg) 93%,transparent)!important}
   .band{filter:none}
 }
+
+/* 3D is hero-only: hide the leftover project/contact canvases and show the flat fallback art */
+.flat3d .p3d,.flat3d .c3d{display:none}
+.flat3d .proj .vis:has(.p3d){position:relative}
+.flat3d .proj .vis::after{content:"";position:absolute;left:50%;top:50%;width:150px;height:150px;transform:translate(-50%,-50%);border-radius:50%;border:1px solid color-mix(in srgb,var(--c,var(--plum)) 70%,transparent);box-shadow:0 0 44px -6px var(--c,var(--plum)),inset 0 0 34px -10px var(--c,var(--plum))}
+.flat3d .proj .vis:not(:has(.p3d))::after{display:none}
+#page3d{display:none}
 </style>
 
 </head>
@@ -899,7 +906,6 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   </div>
 </nav>
 
-<canvas id="page3d" aria-hidden="true"></canvas>
 <main id="top">
 <header class="hero">
   <canvas id="blobs" aria-hidden="true"></canvas>
@@ -2813,8 +2819,8 @@ void main(){
         gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL); gl.depthMask(true);
         gl.enable(gl.CULL_FACE); gl.cullFace(gl.BACK);
         const b = G.avatar; bind(b);
-        const sD = D ? Math.min(D.s, 1.2) : 0, ry = D ? sD * .8 - .04 : px * .5 + Math.sin(t*.5) * .04, rx = D ? sD * .12 : py * .18;
-        const yy = o.pos[1] + Math.sin(t*.7) * o.float + o.hoverK * .12;
+        const sD = D ? Math.min(D.s, 1.2) : 0, ry = opts.avatarStatic ? 0 : D ? sD * .8 - .04 : px * .5 + Math.sin(t*.5) * .04, rx = opts.avatarStatic ? 0 : D ? sD * .12 : py * .18;
+        const yy = o.pos[1] + (opts.avatarStatic ? 0 : Math.sin(t*.7) * o.float + o.hoverK * .12);
         const sc = 1 + o.hoverK * .035;
         gl.uniformMatrix4fv(U.uModel, false, M.trs(o.pos[0], yy, o.pos[2], rx, ry, 0, o.scale[0]*sc, o.scale[1]*sc, o.scale[2]*sc));
         gl.uniform3fv(U.uColor, new Float32Array(o.col));
@@ -2947,67 +2953,13 @@ window.CUTOUT_WEBP="data:image/webp;base64,UklGRm73AgBXRUJQVlA4WAoAAAAQAAAA/wMA2
     };
     const MOBAV = [-3.4, 15];
     const H = mount(cv, { scene: 'hero', S: .8, Sx: .62, Sy: 1, bulge: .16, cutout: window.CUTOUT_WEBP, avatarScale: 12.5, avatarPos: [.2, -3.2, 0],
-      host: hp, blocked: () => true, layout, auto: true,
+      host: hp, blocked: () => true, layout, auto: false, noPointer: 1, avatarStatic: 1,
       onAvatar: ok => { if (ok) { hp.classList.add('av'); if (reduce && H) H.once(); } } });
     if (H) { cv.classList.add('on'); hp.classList.add('gl'); }
   }
 
-  /* page-wide 3D: neon props anchored to every section; the camera follows scroll */
-  const pg = document.getElementById('page3d');
-  if (pg) {
-    const ids = ['about', 'roles', 'journey', 'work', 'skills', 'reels', 'gaming', 'hobbies', 'contact'];
-    let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-    const cols = ['teal', 'sun', 'mag', 'plum', 'ice'];
-    const items = []; let side = 1;
-    const lean = coarse || innerWidth < 820;
-    const T = (sec, list) => list.forEach(([kind, dy, sd, s, ix, z, d]) => (lean && d) || items.push({ kind, sec, dy, side: sd, s: Math.round(s * 1.6), ix: ix == null ? rnd() : ix, z: z == null ? Math.round(rnd() * 200 - 140) : z, c: cols[items.length % 5], a: 1, d: !!d }));
-    T('about',   [['code', .14, 1, 78], ['ring', .5, -1, 105, .3], ['ai', .82, 1, 66, null, null, 1]]);
-    T('roles',   [['knot', .14, -1, 98], ['laptop', .55, 1, 104], ['octa', .88, -1, 56, null, null, 1]]);
-    T('journey', [['books', .22, 1, 92], ['ring', .62, -1, 100], ['tetra', .92, 1, 54, null, null, 1]]);
-    T('work',    [['screen', .05, -1, 110], ['ae', .16, 1, 84], ['cam', .29, -1, 100], ['octa', .41, 1, 70, null, null, 1], ['screen2', .52, -1, 106],
-                  ['rock', .63, 1, 96], ['pad', .74, -1, 100], ['knot', .85, 1, 82], ['tetra', .95, -1, 60, null, null, 1]]);
-    T('skills',  [['octa', .2, -1, 92], ['ai', .55, 1, 76], ['ring', .88, -1, 86]]);
-    T('reels',   [['cam', .25, 1, 104], ['ring', .7, -1, 96], ['cube', .92, 1, 46, null, null, 1]]);
-    T('gaming',  [['pad', .28, -1, 106], ['cube', .62, 1, 52], ['octa', .9, -1, 62, null, null, 1]]);
-    T('hobbies', [['rock', .08, 1, 96], ['tetra', .28, -1, 70], ['knot', .5, 1, 88], ['rock2', .72, -1, 90], ['cube', .93, 1, 48, null, null, 1]]);
-    T('contact', [['ring', .25, -1, 96], ['octa', .72, 1, 74]]);
-    /* small fillers so the gaps between the big props are never empty */
-    ids.forEach(id => { const n = id === 'work' ? 7 : 2; for (let i = 0; i < n; i++) T(id, [[['cube', 'octa', 'tetra'][(i + id.length) % 3], (i + .5) / n + (rnd() - .5) * .06, i % 2 ? 1 : -1, 26 + Math.round(rnd() * 20), rnd(), Math.round(rnd() * 200 - 160), 1]]); });
-    /* larger, deeper props behind the card columns so the glass has something to refract */
-    const M2 = (sec, list) => lean || list.forEach(([kind, dy, sd, s, ix]) => items.push({ kind, sec, dy, side: sd, s, ix, z: -260, c: cols[items.length % 5], a: .9, d: false, mid: true }));
-    M2('roles',   [['knot', .3, -1, 190, .5], ['octa', .72, 1, 170, .6]]);
-    M2('journey', [['ring', .5, 1, 200, .3]]);
-    M2('work',    [['octa', .17, 1, 180, .5], ['knot', .38, -1, 200, .4], ['ring', .58, 1, 210, .5], ['octa', .8, -1, 190, .5]]);
-    M2('skills',  [['knot', .5, 1, 190, .4]]);
-    M2('reels',   [['tetra', .5, -1, 180, .5]]);
-    M2('gaming',  [['ring', .5, 1, 190, .4]]);
-    M2('hobbies', [['knot', .28, 1, 190, .5], ['octa', .62, -1, 180, .5], ['ring', .88, 1, 190, .4]]);
-    const secs = {};
-    const measure = () => { ids.forEach(id => { const e = document.getElementById(id); if (e) { const r = e.getBoundingClientRect(); secs[id] = [r.top + scrollY, r.height]; } }); };
-    measure();
-    let PG = null;
-    try { PG = NeonHero.initScene(pg, { scene: 'page', pageItems: items, fov: 43, near: 60, far: 5000, maxDpr: coarse ? 1 : 1.6, fps: coarse ? 30 : 0, host: document.body,
-      auto: false, px: 1, pageInfo: () => ({ y: scrollY, secs }), onLost: fail }); } catch (e) { PG = null; }
-    if (PG) {
-      pg.classList.add('on');
-      const sync = () => { if (document.hidden) PG.stop(); else reduce ? PG.once() : PG.start(); };
-      document.addEventListener('visibilitychange', sync);
-      let mt; const remeasure = () => { clearTimeout(mt); mt = setTimeout(() => { measure(); if (reduce) PG.once(); }, 120); };
-      addEventListener('resize', remeasure, { passive: true });
-      addEventListener('load', remeasure);
-      document.fonts && document.fonts.ready && document.fonts.ready.then(remeasure);
-      if (window.ResizeObserver) new ResizeObserver(remeasure).observe(document.body);
-      [400, 1200, 2500].forEach(ms => setTimeout(remeasure, ms));
-      if (reduce) { let raf = 0; addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; PG.once(); }); }, { passive: true }); }
-      sync();
-    }
-  }
-
-  /* project-card scenes + contact */
-  const cfg = { vpc: { camZ: 6.4, orbit: .3, camY: 1 }, raft: { camZ: 6.8, orbit: .25, camY: 1.1 }, web: { camZ: 6.6, orbit: .3, camY: .4 } };
-  document.querySelectorAll('.p3d').forEach(c => { const k = c.dataset.scene; mount(c, Object.assign({ scene: k, fit: 0, px: .5 }, cfg[k] || {})); });
-  const cc = document.querySelector('.c3d');
-  if (cc && !coarse) mount(cc, { scene: 'contact', camZ: 11, orbit: .2, px: .4, noPointer: 1 });
+  /* 3D lives in the hero only: project-card and contact scenes are switched off */
+  root.classList.add('flat3d');
 
   /* cards: a small 3D tilt that follows the pointer (hero scene itself ignores the mouse) */
   if (!coarse && !reduce) {
