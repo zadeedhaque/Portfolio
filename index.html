@@ -804,6 +804,53 @@ dialog.case{background:color-mix(in srgb,var(--bg2) 86%,transparent)!important;b
   .sticky{right:-4px;font-size:11.5px}
 }
 @media (prefers-reduced-motion:reduce){.hsoc a,.sticky{transition:none}}
+
+/* ===================== centred hero (desktop) ===================== */
+@media (min-width:981px){
+  .hero .wrap{grid-template-columns:minmax(0,1fr) minmax(0,.58fr)}
+  .hero .card3d{min-height:clamp(420px,42vw,590px)}
+  .hero .sub{max-width:20.5em}
+  .hero .roles{font-size:clamp(18px,1.85vw,26px)}
+  .hero .frame{right:-1%;bottom:2%;width:min(60%,176px)}
+  .hero .tag.t1{right:6%;bottom:calc(2% + min(72%,214px))}
+  .hero .tag.t2{top:2%;left:auto;right:2%}
+  .hero .tag.t3{bottom:calc(2% - 22px);right:2%}
+}
+
+/* ===================== glass · 3D · neon cards ===================== */
+.role,.it,.proj,.skc,.rig,.hcard,.reel,.capture,.debug,.mini div,.cbox,.hero .hats div,.stream,.postcard{
+  --nc:var(--c,var(--plum));
+  border:1px solid transparent!important;
+  background:
+    linear-gradient(118deg,rgba(255,255,255,.17) 0%,rgba(255,255,255,.05) 22%,rgba(255,255,255,0) 46%) padding-box,
+    linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.02) 60%,rgba(255,255,255,.05)) padding-box,
+    color-mix(in srgb,var(--bg2) 44%,transparent) padding-box,
+    linear-gradient(140deg,color-mix(in srgb,var(--nc) 95%,#fff 8%) 0%,rgba(255,255,255,.16) 24%,rgba(255,255,255,.05) 55%,color-mix(in srgb,var(--nc) 80%,transparent) 100%) border-box!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.34),
+    inset 0 -22px 34px -26px color-mix(in srgb,var(--nc) 55%,transparent),
+    inset 0 0 22px rgba(255,255,255,.025),
+    0 1px 0 color-mix(in srgb,var(--nc) 60%,transparent),
+    0 9px 0 -5px color-mix(in srgb,var(--nc) 20%,var(--bg)),
+    0 30px 46px -26px rgba(0,0,0,.92),
+    0 0 44px -20px color-mix(in srgb,var(--nc) 90%,transparent)!important;
+  transform-style:preserve-3d;
+}
+.role:hover,.it:hover,.proj:hover,.hcard:hover,.reel:hover,.skc:hover,.hero .hats div:hover{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.45),
+    inset 0 -26px 40px -26px color-mix(in srgb,var(--nc) 75%,transparent),
+    0 1px 0 var(--nc),
+    0 11px 0 -5px color-mix(in srgb,var(--nc) 30%,var(--bg)),
+    0 40px 60px -28px rgba(0,0,0,.95),
+    0 0 64px -14px var(--nc)!important;
+}
+.hats .hi,.ricon{transform:translateZ(28px)}
+.role h3,.proj h3,.skc h3,.hcard h3,.it h4,.hero .hats b{transform:translateZ(18px)}
+.stream,.capture,.debug,.postcard{--nc:var(--teal)}
+.cbox{--nc:var(--mag)}
+.tilting{will-change:transform;transition:transform .12s ease-out,box-shadow .35s ease!important}
+@media (hover:none),(prefers-reduced-motion:reduce){.tilting{transition:none!important}}
 </style>
 
 </head>
@@ -2489,7 +2536,7 @@ void main(){
     const SC = opts.scene || 'hero';
     const Sx = opts.Sx || 1, Sy = opts.Sy || 1, S = opts.S || 1;
     const add0 = add;
-    add = o => { o = Object.assign({}, o);
+    add = o => { o = Object.assign({}, o); o.bx = o.pos ? o.pos[0] : 0; o.by = o.pos ? o.pos[1]*Sy : 0;
       if (o.pos) o.pos = [o.pos[0]*Sx, o.pos[1]*Sy, o.pos[2]*S];
       if (o.scale) o.scale = o.scale.map(v => v*S);
       if (o.float != null) o.float *= S;
@@ -2502,35 +2549,35 @@ void main(){
     if (SC === 'hero') {
       /* behind the avatar */
       add({ geo:'knot', col:C.mag, pos:[.6,.9,-7], scale:[3.9,3.9,3.9], spin:[.03,.05,.01], emis:.45, alpha:1, glow:3.8, float:.2, label:'creative' });
-      add({ geo:'plane', col:C.teal, pos:[6.9,5.2,-3.8], scale:[3.0,1.9,1], rot:[.05,-.5,.03], spin:[0,0,0], tex:'screen', emis:.1, alpha:.95, glow:2, float:.18, pick:1, label:'build' });
-      add({ geo:'plane', col:C.mag, pos:[-6.2,3.6,-3.6], scale:[2.8,1.8,1], rot:[.05,.5,-.04], spin:[0,0,0], tex:'screen2', emis:.1, alpha:.95, glow:1.8, float:.22, pick:1, label:'ship' });
-      add({ geo:'box', col:C.plum, pos:[-7.3,1,-1.4], scale:[1.4,1.4,1.4], rot:[.4,.7,.15], spin:[.05,.12,0], tex:'code', emis:.18, glow:1.6, pick:1, label:'&lt;/&gt; code' });
-      add({ geo:'ring', col:C.teal, pos:[-8.4,-1.4,-4], scale:[1.5,1.5,1.5], rot:[.9,.3,0], spin:[.02,.07,0], emis:.2, alpha:.8, glow:1.2 });
-      add({ geo:'octa', col:C.plum, pos:[-7.6,-3.2,-2.4], scale:[.8,.8,.8], spin:[.06,.1,0], emis:.18, glow:1, pick:1 });
+      add({ geo:'plane', col:C.teal, pos:[6.9,5.2,-3.8], grp:'scrT', scale:[3.0,1.9,1], rot:[.05,-.5,.03], spin:[0,0,0], tex:'screen', emis:.1, alpha:.95, glow:2, float:.18, pick:1, label:'build' });
+      add({ geo:'plane', col:C.mag, pos:[-6.2,3.6,-3.6], grp:'scrM', scale:[2.8,1.8,1], rot:[.05,.5,-.04], spin:[0,0,0], tex:'screen2', emis:.1, alpha:.95, glow:1.8, float:.22, pick:1, label:'ship' });
+      add({ geo:'box', col:C.plum, pos:[-7.3,1,-1.4], grp:'code', scale:[1.4,1.4,1.4], rot:[.4,.7,.15], spin:[.05,.12,0], tex:'code', emis:.18, glow:1.6, pick:1, label:'&lt;/&gt; code' });
+      add({ geo:'ring', col:C.teal, pos:[-8.4,-1.4,-4], grp:'ring', scale:[1.5,1.5,1.5], rot:[.9,.3,0], spin:[.02,.07,0], emis:.2, alpha:.8, glow:1.2 });
+      add({ geo:'octa', col:C.plum, pos:[-7.6,-3.2,-2.4], grp:'octa', scale:[.8,.8,.8], spin:[.06,.1,0], emis:.18, glow:1, pick:1 });
       /* beside / in front of the avatar */
-      add({ geo:'box', col:C.ice, pos:[7.7,-.2,-.8], scale:[1.3,1.3,1.3], rot:[.3,-.5,-.1], spin:[.04,-.11,0], tex:'ai', emis:.18, glow:1.5, pick:1, label:'AI' });
+      add({ geo:'box', col:C.ice, pos:[7.7,-.2,-.8], grp:'ai', scale:[1.3,1.3,1.3], rot:[.3,-.5,-.1], spin:[.04,-.11,0], tex:'ai', emis:.18, glow:1.5, pick:1, label:'AI' });
       /* laptop: screen + base */
-      add({ geo:'plane', col:C.teal, pos:[5.6,1.6,.4], scale:[3.7,2.3,1], rot:[-.12,-.42,.02], spin:[0,0,0], tex:'laptop', emis:.16, alpha:1, glow:2.4, float:.16, phase:1, pick:1, label:'build · create · play · repeat' });
-      add({ geo:'slab', col:C.plum, pos:[5.5,.38,.9], scale:[3.7,1,2], rot:[.04,-.42,0], spin:[0,0,0], emis:.2, alpha:.9, glow:.8, float:.16, phase:1 });
+      add({ geo:'plane', col:C.teal, pos:[5.6,1.6,.4], grp:'lap', scale:[3.7,2.3,1], rot:[-.12,-.42,.02], spin:[0,0,0], tex:'laptop', emis:.16, alpha:1, glow:2.4, float:.16, phase:1, pick:1, label:'build · create · play · repeat' });
+      add({ geo:'slab', col:C.plum, pos:[5.5,.38,.9], grp:'lap', scale:[3.7,1,2], rot:[.04,-.42,0], spin:[0,0,0], emis:.2, alpha:.9, glow:.8, float:.16, phase:1 });
       /* camera */
-      add({ geo:'box', col:C.ice, pos:[6.6,4.5,.7], scale:[1.7,1.1,1], rot:[.15,-.5,.05], spin:[.03,.05,0], emis:.2, glow:1.4, float:.28, pick:1, label:'video' });
-      add({ geo:'cyl', col:C.mag, pos:[6.35,4.5,1.35], scale:[.7,.6,.7], rot:[1.4,-.5,0], spin:[0,0,0], emis:.3, glow:.9, float:.28, pick:1, label:'video' });
+      add({ geo:'box', col:C.ice, pos:[6.6,4.5,.7], grp:'cam', scale:[1.7,1.1,1], rot:[.15,-.5,.05], spin:[.03,.05,0], emis:.2, glow:1.4, float:.28, pick:1, label:'video' });
+      add({ geo:'cyl', col:C.mag, pos:[6.35,4.5,1.35], grp:'cam', scale:[.7,.6,.7], rot:[1.4,-.5,0], spin:[0,0,0], emis:.3, glow:.9, float:.28, pick:1, label:'video' });
       /* gamepad */
-      add({ geo:'box', col:C.sun, pos:[7.6,-2.6,1.3], scale:[2,.5,.9], rot:[.7,-.5,.2], spin:[.02,.05,0], emis:.22, glow:1.2, float:.24, pick:1, label:'gaming' });
-      add({ geo:'cyl', col:C.sun, pos:[6.75,-2.35,1.5], scale:[.55,.7,.55], rot:[.6,-.5,.2], spin:[0,0,0], emis:.25, glow:.5, float:.24, pick:1, label:'gaming' });
-      add({ geo:'cyl', col:C.sun, pos:[8.5,-2.85,1.1], scale:[.55,.7,.55], rot:[.6,-.5,.2], spin:[0,0,0], emis:.25, glow:.5, float:.24, pick:1, label:'gaming' });
+      add({ geo:'box', col:C.sun, pos:[7.6,-2.6,1.3], grp:'pad', scale:[2,.5,.9], rot:[.7,-.5,.2], spin:[.02,.05,0], emis:.22, glow:1.2, float:.24, pick:1, label:'gaming' });
+      add({ geo:'cyl', col:C.sun, pos:[6.75,-2.35,1.5], grp:'pad', scale:[.55,.7,.55], rot:[.6,-.5,.2], spin:[0,0,0], emis:.25, glow:.5, float:.24, pick:1, label:'gaming' });
+      add({ geo:'cyl', col:C.sun, pos:[8.5,-2.85,1.1], grp:'pad', scale:[.55,.7,.55], rot:[.6,-.5,.2], spin:[0,0,0], emis:.25, glow:.5, float:.24, pick:1, label:'gaming' });
       /* After Effects tile */
-      add({ geo:'box', col:C.plum, pos:[8.3,-4.1,.5], scale:[1.1,1.1,.3], rot:[.2,-.4,.15], spin:[.02,.04,0], tex:'ae', emis:.2, glow:1.4, float:.2, pick:1, label:'after effects' });
+      add({ geo:'box', col:C.plum, pos:[8.3,-4.1,.5], grp:'ae', scale:[1.1,1.1,.3], rot:[.2,-.4,.15], spin:[.02,.04,0], tex:'ae', emis:.2, glow:1.4, float:.2, pick:1, label:'after effects' });
       /* books */
       ['CREATE','DEVELOP','DESIGN'].forEach((t, i) => add({
         geo:'book', col:[C.teal, C.sun, C.mag][i], pos:[-6.4, -4.5 + i*.5, 1.4],
-        scale:[2.4,1,1], rot:[0,.3,-.03], spin:[0,0,0], tex:'book'+i, emis:.14, glow:.7, float:.1, pick:1, label:t }));
+        scale:[2.4,1,1], rot:[0,.3,-.03], spin:[0,0,0], grp:'books', tex:'book'+i, emis:.14, glow:.7, float:.1, pick:1, label:t }));
       /* rocks along the floor */
       [[-8.6,-5.4,-1.2,1.5,0],[-3.8,-5.9,.4,1.1,1],[0.4,-6.2,-.4,1.7,2],[4.2,-6.0,.6,1.2,0],[8.2,-5.6,-.8,1.6,1],[-6,-6.3,-3,1.9,2],[6.4,-6.4,-3,2.1,0]].forEach((r, i) => add({
         geo:'rock'+r[4], col:[C.plum,C.teal,C.mag][i%3], pos:[r[0],r[1],r[2]], scale:[r[3],r[3]*.7,r[3]], rot:[i,i*1.7,0],
         spin:[0,0,0], emis:0, alpha:.5, glow:.25, float:.02 }));
-      add({ geo:'tetra', col:C.sun, pos:[-5.4,-2.6,.6], scale:[.5,.5,.5], spin:[-.09,.11,.04], emis:.2, glow:.9, pick:1 });
-      add({ geo:'box', col:C.sun, pos:[-5.2,3.6,-.4], scale:[.4,.4,.4], spin:[.12,.16,.08], emis:.3, glow:.7 });
+      add({ geo:'tetra', col:C.sun, pos:[-5.4,-2.6,.6], grp:'tetraL', scale:[.5,.5,.5], spin:[-.09,.11,.04], emis:.2, glow:.9, pick:1 });
+      add({ geo:'box', col:C.sun, pos:[-5.2,3.6,-.4], grp:'cubeL', scale:[.4,.4,.4], spin:[.12,.16,.08], emis:.3, glow:.7 });
       add({ geo:'box', col:C.mag, pos:[4.3,5.3,-1.6], scale:[.36,.36,.36], spin:[-.1,.15,.06], emis:.3, glow:.6 });
       cubes(12);
     } else if (SC === 'vpc') {
@@ -2632,23 +2679,33 @@ void main(){
     function frame(now) {
       raf = 0; if (!running) return;
       resize();
-      const t = (now - t0) * .001;
+      const D = opts.drive ? opts.drive() : null;
+      const t = D ? D.t : (now - t0) * .001;
       px += (tpx - px) * .05; py += (tpy - py) * .05;
       if (opts.auto && mouseX < -1e3) { tpx = Math.sin(t*.35)*.7; tpy = Math.cos(t*.27)*.35; }
+      if (D) { tpx = tpy = px = py = 0; }
       orbit = (opts.orbit || 0) * t;
       let R0 = cam[2];
       shX = (opts.shift && aspect > (opts.shiftMin || 1.15)) ? opts.shift : 0; shY = 0;
-      if (opts.anchor) { const A = opts.anchor(W, H);
-        if (A) { shX = A.x / W * 2 - 1; shY = -(A.y / H * 2 - 1); R0 = (H/2) / (A.unit * Math.tan((opts.fov || 43) * Math.PI/360)); } }
-      else if (opts.fit) R0 *= Math.min(1.6, Math.max(1, .95/aspect));
+      const L = opts.layout ? opts.layout(W, H) : null;
+      if (L) {
+        shX = L.x / W * 2 - 1; shY = -(L.y / H * 2 - 1);
+        R0 = (H/2) / (L.unit * Math.tan((opts.fov || 43) * Math.PI/360));
+        objs.forEach(o => { if (o.avatar) return;
+          let x = o.bx * L.sx, y = o.by; const off = L.off && o.grp && L.off[o.grp];
+          if (off) { x += off[0]; y += off[1]; }
+          o.pos[0] = x; o.pos[1] = y; o.hidden = !!(L.hide && o.grp && L.hide.indexOf(o.grp) >= 0); });
+        if (avatar) { avatar.pos[0] = L.av[0]; avatar.pos[1] = L.av[1]; avatar.pos[2] = 0; const sc = L.av[2] * S; avatar.scale = [sc, sc, sc]; }
+      }
+      if (!L && opts.fit) R0 *= Math.min(1.6, Math.max(1, .95/aspect));
       const R = R0, k = opts.px == null ? 1 : opts.px;
-      const eye = [Math.sin(orbit)*R + px*1.7*k, cam[1] - py*1.1*k + (opts.camY || 0), Math.cos(orbit)*R];
+      const eye = [Math.sin(orbit)*R + px*1.7*k, cam[1] - py*1.1*k + (opts.camY || 0) + (D ? Math.min(D.s, 1.2) * 1.8 : 0), Math.cos(orbit)*R];
       const view = M.look(eye[0], eye[1], eye[2], 0, 0, 0);
       const P = proj(), pv = M.mul(P, view);
 
       /* hover pick */
       let best = -1, bestD = 1e9;
-      const blocked = opts.blocked && opts.blocked();
+      const blocked = D || (opts.blocked && opts.blocked());
       objs.forEach((o, i) => {
         if (!o.pick || blocked) return;
         const s = project([o.pos[0], o.pos[1] + Math.sin(t*.7+o.phase)*o.float, o.pos[2]], pv);
@@ -2674,7 +2731,7 @@ void main(){
         gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL); gl.depthMask(true);
         gl.enable(gl.CULL_FACE); gl.cullFace(gl.BACK);
         const b = G.avatar; bind(b);
-        const ry = px * .5 + Math.sin(t*.5) * .04, rx = py * .18;
+        const sD = D ? Math.min(D.s, 1.2) : 0, ry = D ? sD * .8 - .04 : px * .5 + Math.sin(t*.5) * .04, rx = D ? sD * .12 : py * .18;
         const yy = o.pos[1] + Math.sin(t*.7) * o.float + o.hoverK * .12;
         const sc = 1 + o.hoverK * .035;
         gl.uniformMatrix4fv(U.uModel, false, M.trs(o.pos[0], yy, o.pos[2], rx, ry, 0, o.scale[0]*sc, o.scale[1]*sc, o.scale[2]*sc));
@@ -2694,7 +2751,7 @@ void main(){
       gl.bindTexture(gl.TEXTURE_2D, glowT);
       gl.uniform1f(U.uMode, 2);
       objs.forEach(o => {
-        if (!o.glow) return;
+        if (!o.glow || o.hidden) return;
         const yy = o.pos[1] + Math.sin(t*.7+o.phase)*o.float;
         const k = o.glow * (1 + o.hoverK * .8) * 2.6;
         const m = M.trs(o.pos[0], yy, o.pos[2]-.15, 0, 0, 0, k, k, k);
@@ -2708,7 +2765,7 @@ void main(){
 
       /* solids then edges */
       objs.forEach((o, i) => {
-        if (o.avatar) return;
+        if (o.avatar || o.hidden) return;
         const hov = i === hoverIdx;
         o.hoverK += ((hov ? 1 : 0) - o.hoverK) * .12;
         const b = G[o.geo]; bind(b);
@@ -2732,7 +2789,7 @@ void main(){
         gl.drawElements(gl.LINES, b.ne, gl.UNSIGNED_SHORT, 0);
       });
 
-      raf = requestAnimationFrame(frame);
+      if (!opts.onDemand) raf = requestAnimationFrame(frame);
     }
 
     canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); api.stop(); canvas.style.opacity = 0; if (opts.onLost) opts.onLost(); });
@@ -2749,6 +2806,7 @@ void main(){
     const api = {
       gl,
       start(){ if(!raf){ running = true; t0 = performance.now() - 1000; raf = requestAnimationFrame(frame);} },
+      draw(){ if (!raf) { running = true; raf = requestAnimationFrame(frame); } },
       stop(){ running = false; if(raf) cancelAnimationFrame(raf); raf = 0; },
       once(){ running = true; resize(); frame(performance.now()); if(raf){cancelAnimationFrame(raf); raf=0;} },
       auto(on){ opts.auto = on; },
@@ -2787,30 +2845,39 @@ window.CUTOUT_WEBP="data:image/webp;base64,UklGRm73AgBXRUJQVlA4WAoAAAAQAAAA/wMA2
   }
   document.addEventListener('visibilitychange', () => live.forEach(f => f()));
 
-  /* hero: 3D avatar + neon props */
+  /* hero: centred cutout + neon props. No mouse input at all: the scene reacts to scroll only */
   const cv = document.getElementById('hero3d'), hp = document.querySelector('.hero');
   if (cv && hp) {
-    const hl = document.getElementById('hl');
-    let mx = 0, my = 0, cur = null, ui = false;
-    hp.addEventListener('pointermove', e => { const r = hp.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top;
-      ui = !!(e.target.closest && e.target.closest('a,.btn,.hats,h1,.pill,.roles,.sub,.frame,.tag'));
-      if (cur && hl) hl.style.transform = 'translate3d(' + (mx + 16) + 'px,' + (my + 14) + 'px,0)'; }, { passive: true });
-    hp.addEventListener('pointerleave', () => { cur = null; if (hl) hl.classList.remove('on'); hp.classList.remove('hov'); }, { passive: true });
-    const stage = document.getElementById('card');
-    const H = mount(cv, { scene: 'hero', S: .8, Sx: .62, Sy: 1, auto: 1, px: .55, bulge: .16,
-      cutout: window.CUTOUT_WEBP, avatarScale: 12.5, avatarPos: [.2, -3.2, 0], avatarLabel: "that's me",
-      anchor: () => { const c = cv.getBoundingClientRect(), r = stage.getBoundingClientRect();
-        return { x: r.left - c.left + r.width / 2, y: r.top - c.top + r.height / 2, unit: Math.min(r.width / 10.8, r.height / 12.6) }; },
-      blocked: () => ui,
-      onAvatar: ok => { if (ok) hp.classList.add('av'); },
-      onHover: o => {
-        if (o === cur) return; cur = o;
-        hp.classList.toggle('hov', !!o);
-        if (!hl) return;
-        if (o && o.label) { hl.innerHTML = o.label; hl.style.transform = 'translate3d(' + (mx + 16) + 'px,' + (my + 14) + 'px,0)'; hl.classList.add('on'); }
-        else hl.classList.remove('on');
-      } });
-    if (H) { cv.classList.add('on'); hp.classList.add('gl'); }
+    const wrapEl = hp.querySelector('.wrap'), stage = document.getElementById('card'), hats = hp.querySelector('.hats');
+    const layout = () => {
+      const c = cv.getBoundingClientRect();
+      if (innerWidth > 980) {
+        const w = wrapEl.getBoundingClientRect(), hr = hats.getBoundingClientRect();
+        const pad = parseFloat(getComputedStyle(wrapEl).paddingLeft) || 0;
+        const unit = Math.max(20, (w.width - pad * 2) / 24);
+        return { x: w.left - c.left + w.width / 2, y: hr.top - c.top - 4.35 * unit, unit, sx: 1.28, av: [0, -.55, 11.2],
+          hide: ['code', 'ring', 'octa', 'books', 'tetraL', 'cubeL'],
+          off: { scrM: [10.4, 4.4], scrT: [-.6, 2.4], lap: [-3.0, 3.6], cam: [2.4, .6], ai: [-3.4, 1.8], pad: [-2.6, -.8], ae: [.3, .4] } };
+      }
+      const r = stage.getBoundingClientRect();
+      return { x: r.left - c.left + r.width / 2, y: r.top - c.top + r.height / 2, unit: Math.min(r.width / 10.8, r.height / 12.6), sx: .62, av: [.124, -3.2, 12.5] };
+    };
+    const drive = () => { if (reduce) return { s: 0, t: 0 }; const r = hp.getBoundingClientRect(); const s = Math.max(0, -r.top / Math.max(1, r.height)); return { s, t: s * 9 }; };
+    let vis = true, tick = 0;
+    const H = (() => { try { return NeonHero.initScene(cv, { scene: 'hero', S: .8, Sx: .62, Sy: 1, bulge: .16, maxDpr: coarse ? 1.5 : 2,
+      cutout: window.CUTOUT_WEBP, avatarScale: 12.5, avatarPos: [.2, -3.2, 0], noPointer: 1, onDemand: 1, drive, layout,
+      onAvatar: ok => { if (ok) { hp.classList.add('av'); H && H.draw(); } }, onLost: fail }); } catch (e) { return null; } })();
+    if (H) {
+      cv.classList.add('on'); hp.classList.add('gl');
+      const draw = () => { if (vis) H.draw(); };
+      new IntersectionObserver(es => { vis = es[0].isIntersecting; if (vis) H.draw(); }, { rootMargin: '200px' }).observe(hp);
+      addEventListener('scroll', draw, { passive: true });
+      addEventListener('resize', () => { clearTimeout(tick); tick = setTimeout(draw, 80); }, { passive: true });
+      addEventListener('load', draw);
+      document.fonts && document.fonts.ready && document.fonts.ready.then(draw);
+      [150, 600, 1500].forEach(ms => setTimeout(draw, ms));
+      H.draw();
+    }
   }
 
   /* project-card scenes + contact */
@@ -2818,6 +2885,20 @@ window.CUTOUT_WEBP="data:image/webp;base64,UklGRm73AgBXRUJQVlA4WAoAAAAQAAAA/wMA2
   document.querySelectorAll('.p3d').forEach(c => { const k = c.dataset.scene; mount(c, Object.assign({ scene: k, fit: 0, px: .5 }, cfg[k] || {})); });
   const cc = document.querySelector('.c3d');
   if (cc && !coarse) mount(cc, { scene: 'contact', camZ: 11, orbit: .2, px: .4, noPointer: 1 });
+
+  /* cards: a small 3D tilt that follows the pointer (hero scene itself ignores the mouse) */
+  if (!coarse && !reduce) {
+    const sel = '.role,.it,.proj,.skc,.rig,.hcard,.reel,.capture,.debug,.mini div,.cbox,.hero .hats div,.stream';
+    document.querySelectorAll(sel).forEach(el => {
+      const max = el.matches('.proj.feat,.cbox,.reel,.stream') ? 2.2 : 5;
+      el.addEventListener('pointermove', e => {
+        const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        el.classList.add('tilting');
+        el.style.transform = 'perspective(1000px) rotateX(' + (-y * max).toFixed(2) + 'deg) rotateY(' + (x * max).toFixed(2) + 'deg) translateY(-4px)';
+      }, { passive: true });
+      el.addEventListener('pointerleave', () => { el.style.transform = ''; el.classList.remove('tilting'); }, { passive: true });
+    });
+  }
 })();
 </script>
 
