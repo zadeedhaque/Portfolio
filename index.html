@@ -888,6 +888,23 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 /* 3D is hero-only: leftover canvases stay hidden */
 .flat3d .p3d,.flat3d .c3d{display:none}
 #page3d{display:none}
+
+/* Learn Salah card animation */
+.ani-salah{--k:#3ddc97;background:radial-gradient(circle at 78% 30%,rgba(61,220,151,.16),transparent 55%)}
+.ani-salah .mat{fill:rgba(61,220,151,.16);stroke:rgba(61,220,151,.5);stroke-width:1}
+.ani-salah .qib{fill:rgba(61,220,151,.07);stroke:rgba(61,220,151,.5);stroke-width:1.2;stroke-dasharray:4 4;animation:aniMarch 12s linear infinite}
+.ani-salah .pose{opacity:0;animation:salahPose 12s ease-in-out infinite}
+.ani-salah .p2{animation-delay:3s}.ani-salah .p3{animation-delay:6s}.ani-salah .p4{animation-delay:9s}
+.ani-salah .hd{fill:#0e2a22;stroke:#3ddc97;stroke-width:2.4;filter:drop-shadow(0 0 5px #3ddc97)}
+.ani-salah .tor,.ani-salah .arm,.ani-salah .leg{fill:none;stroke:#3ddc97;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(61,220,151,.75))}
+.ani-salah .tor{stroke:#e9fff6;stroke-width:11;opacity:.92}
+.ani-salah .arm{stroke:#9ef5cd;stroke-width:6}
+.ani-salah .leg{stroke:#2fc4ad;stroke-width:8}
+.ani-salah .dot{fill:#ffd23f;filter:drop-shadow(0 0 5px #ffd23f);animation:aniGlow 1.4s ease-in-out infinite}
+.ani-salah .cap{font:600 9px ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;fill:#9ef5cd;opacity:0;animation:salahPose 12s ease-in-out infinite}
+.ani-salah .c2{animation-delay:3s}.ani-salah .c3{animation-delay:6s}.ani-salah .c4{animation-delay:9s}
+@keyframes salahPose{0%{opacity:0}5%,22%{opacity:1}28%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.ani-salah .pose,.ani-salah .cap{opacity:0!important}.ani-salah .p1,.ani-salah .c1{opacity:1!important}}
 .shot video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#000;object-fit:contain}
 
 /* ===================== HTML/CSS animations in the project cards ===================== */
@@ -1020,7 +1037,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
         <p class="lead">I'm a Computer Science student specialising in <mark>Artificial Intelligence</mark>, and I like building things that solve <mark>real problems</mark>.</p>
         <div class="copy">
           <p>I started with Computer Science &amp; Engineering at BRAC University in Dhaka, building my foundation in programming, algorithms and object-oriented design. At Swinburne I'm taking that into AI, software architecture, cloud computing and web development.</p>
-          <p>Before code, I spent years editing and producing video — including leading a small production team. That taught me to plan, collaborate and ship something polished. Now I bring that same energy to software: this year I've shipped a CNN that reads handwritten numbers, a four-role healthcare booking platform, a prize-wheel app for an in-store campaign, three browser games built without a single asset file — a 3D Snake on custom shaders, a parkour platformer whose art is generated in code, and a Bangla-language game about surviving Dhaka traffic — and an interactive 3D physics lab covering an entire national syllabus in two languages.</p>
+          <p>Before code, I spent years editing and producing video — including leading a small production team. That taught me to plan, collaborate and ship something polished. Now I bring that same energy to software: this year I've shipped a CNN that reads handwritten numbers, a four-role healthcare booking platform, a prize-wheel app for an in-store campaign, three browser games built without a single asset file — a 3D Snake on custom shaders, a parkour platformer whose art is generated in code, and a Bangla-language game about surviving Dhaka traffic — an interactive 3D physics lab covering an entire national syllabus in two languages, and a 3D prayer guide in three.</p>
         </div>
         <div class="soft"><span>Team leadership</span><span>Creative problem solving</span><span>Adaptability</span><span>Time management</span><span>Collaboration</span><span>Always learning</span></div>
         <p class="off"><b>off the clock →</b><a href="#hobbies" style="color:inherit">football · gaming · movies &amp; anime · the gym · my cat Ayra</a></p>
@@ -1162,7 +1179,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 
 <section id="work" style="padding-top:0">
   <div class="wrap">
-    <div class="head"><div><div class="eyebrow">04 · Selected work</div><h2 class="scr">Things I <em>built</em></h2></div><p>Eleven projects — a 153-topic physics lab, three browser games built from nothing, a healthcare booking platform, a CNN that reads handwriting, cloud infrastructure, and sixty programs written twice.</p>
+    <div class="head"><div><div class="eyebrow">04 · Selected work</div><h2 class="scr">Things I <em>built</em></h2></div><p>Twelve projects — a 153-topic physics lab, three browser games built from nothing, an interactive 3D prayer guide, a healthcare booking platform, a CNN that reads handwriting, cloud infrastructure, and sixty programs written twice.</p>
     </div>
     <div class="scroller" id="scroller" aria-label="Projects">
       <article class="proj feat glow pl-glow" style="--c:#5aa9ff">
@@ -1219,6 +1236,27 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
             <a class="btn demo-btn" href="https://dhakar-rasta.vercel.app" target="_blank" rel="noopener">▶ Play it ↗</a>
             <button type="button" class="btn a" data-open="dhakar-dlg">Read case study</button>
             <a class="btn b" href="https://github.com/zadeedhaque/Dhakar-Rasta" target="_blank" rel="noopener">View on GitHub ↗</a>
+          </div>
+        </div>
+      </article>
+      <article class="proj feat" style="--c:#3ddc97">
+        <div class="vis"><div class="ani ani-salah" role="img" aria-label="Animated faceless figure moving through the prayer positions: standing, bowing, prostrating and sitting">
+<svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  <defs><linearGradient id="slg" x1="0" x2="1"><stop offset="0" stop-color="#3ddc97" stop-opacity="0"/><stop offset=".5" stop-color="#3ddc97" stop-opacity=".9"/><stop offset="1" stop-color="#3ddc97" stop-opacity="0"/></linearGradient></defs>
+  <path class="qib" d="M338 150 q0 -44 22 -58 q22 14 22 58z"/>
+  <rect class="mat" x="52" y="170" width="296" height="10" rx="5"/><rect x="40" y="171" width="320" height="2" fill="url(#slg)"/>
+  <g transform="translate(36 0)"><g class="pose p1"><circle class="hd" cx="150" cy="48" r="10"/><path class="tor" d="M150 62 L150 112"/><path class="arm" d="M150 70 L164 90 L174 80"/><path class="leg" d="M150 112 L150 140 L152 168"/><circle class="dot" cx="174" cy="80" r="4"/></g><g class="pose p2"><circle class="hd" cx="226" cy="100" r="10"/><path class="tor" d="M150 112 L212 102"/><path class="arm" d="M205 104 L158 138"/><path class="leg" d="M150 112 L150 140 L152 168"/><circle class="dot" cx="158" cy="138" r="4"/></g><g class="pose p3"><circle class="hd" cx="196" cy="158" r="10"/><path class="tor" d="M112 118 L176 140"/><path class="arm" d="M176 140 L204 166"/><path class="leg" d="M112 118 L124 160 L84 168"/><circle class="dot" cx="196" cy="166" r="4"/><circle class="dot" cx="124" cy="160" r="4"/></g><g class="pose p4"><circle class="hd" cx="112" cy="70" r="10"/><path class="tor" d="M112 84 L108 146"/><path class="arm" d="M112 96 L140 130"/><path class="leg" d="M108 146 L142 160 L94 168"/><circle class="dot" cx="140" cy="132" r="4"/></g></g>
+  <g class="caps"><text class="cap c1" x="200" y="198" text-anchor="middle">Qiyam · standing</text><text class="cap c2" x="200" y="198" text-anchor="middle">Ruku · bowing</text><text class="cap c3" x="200" y="198" text-anchor="middle">Sujud · prostration</text><text class="cap c4" x="200" y="198" text-anchor="middle">Julus · sitting</text></g>
+</svg></div></div>
+        <div class="body">
+          <div class="k">Solo build · Interactive 3D web app · React &amp; Three.js</div>
+          <h3>Learn Salah</h3>
+          <p>Don't just read how to pray — see it. A faceless 3D figure, generated entirely in code, performs each movement of the Islamic prayer while the instructions, Arabic, transliteration and translation stay in sync beside it. All five daily prayers, four madhhabs side by side, in English, বাংলা and العربية.</p>
+          <div class="chips"><span>React 19</span><span>TypeScript</span><span>Three.js</span><span>React Three Fiber</span><span>Tailwind CSS 4</span><span>Zustand</span><span>Vite</span><span>0 model files</span></div>
+          <div class="pbtns">
+            <a class="btn demo-btn" href="https://learn-salah.vercel.app" target="_blank" rel="noopener">▶ Open the app ↗</a>
+            <button type="button" class="btn a" data-open="salah-dlg">Read case study</button>
+            <a class="btn b" href="https://github.com/zadeedhaque/Learn-Salah" target="_blank" rel="noopener">View on GitHub ↗</a>
           </div>
         </div>
       </article>
@@ -2239,6 +2277,64 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
     <div class="pbtns" style="margin-top:18px">
       <a class="btn demo-btn" href="https://dhakar-rasta.vercel.app" target="_blank" rel="noopener">▶ Play Dhakar Rasta ↗</a>
       <a class="btn a" href="https://github.com/zadeedhaque/Dhakar-Rasta" target="_blank" rel="noopener">View code on GitHub ↗</a>
+      <button type="button" class="btn b" data-close>Close</button>
+    </div>
+  </div>
+</dialog>
+<dialog id="salah-dlg" class="case" aria-labelledby="salah-title">
+  <div class="case-in">
+    <button type="button" class="case-x" data-close aria-label="Close">✕</button>
+    <div class="k">Solo build · Interactive 3D web app · 2026</div>
+    <h2 id="salah-title">Learn Salah</h2>
+    <p class="lead">Don't just read how to pray. See it. Learn it. Practice it. Learn Salah teaches the Islamic prayer through a 3D figure instead of text alone: as you scroll through a lesson the figure moves into each position — takbir, bowing, prostration, sitting — while the camera, highlights, instructions, Arabic text, transliteration and meaning stay in sync beside it.</p>
+
+    <div class="stats3 s4">
+      <div><b>0</b><span>3D model files — the figure is generated entirely in code</span></div>
+      <div><b>5</b><span>Daily prayers, taught rak'ah by rak'ah</span></div>
+      <div><b>4</b><span>Sunni schools of law compared side by side</span></div>
+      <div><b>3</b><span>Languages: English, বাংলা and العربية, with full right-to-left layout</span></div>
+    </div>
+
+    <p style="border-left:3px solid var(--c,#3ddc97);padding:6px 0 6px 14px;color:var(--muted);font-size:14px;margin:4px 0 6px"><b style="color:var(--text,#fff)">Status:</b> the religious content is a draft awaiting scholar review, and audio recitations haven't been added yet. The site says so itself.</p>
+
+    <h3>The 3D engine</h3>
+    <ul class="did">
+      <li><b>A figure with no model files.</b> The centerpiece is a faceless human figure generated entirely in code: a full skeleton with articulated hands and feet, a draped robe with folds, and a kufi cap. It loads instantly because there is nothing to download.</li>
+      <li><b>Each position defined once.</b> The figure is placed with inverse kinematics so contact points are exact — forehead and palms flat on the floor in prostration, hands on the knees when bowing.</li>
+      <li><b>One animation system.</b> It moves the figure smoothly between positions and passes through realistic in-between postures, for example standing, then kneeling, then prostrating. The descent order even follows the selected madhhab (knees first or hands first).</li>
+      <li><b>A camera that directs itself.</b> A dedicated camera system picks the clearest angle for each step automatically; users can switch to front, side or three-quarter views, or rotate freely.</li>
+    </ul>
+
+    <h3>The learning experience</h3>
+    <ul class="did">
+      <li><b>Scroll-driven lessons.</b> As each step reaches the reading line, the figure, camera, body-part highlights, recitation and timeline update together. Each step answers three questions: what am I doing, how exactly do I position myself, and what do I say.</li>
+      <li><b>For complete beginners</b> there is an onboarding path covering wudu, qiblah and prayer times, followed by lessons for each of the five daily prayers.</li>
+      <li><b>Practice mode</b> quizzes you on what comes next, alongside a recitation library and a quick-reference view.</li>
+      <li><b>Madhhabs side by side.</b> The four schools are compared without ranking one over another, and choosing one changes the figure's posture where they differ.</li>
+    </ul>
+
+    <h3>Content and accuracy</h3>
+    <ul class="did">
+      <li><b>Content as data.</b> All religious content is stored as structured data, separate from the interface, so a scholar can review it without touching the code.</li>
+      <li><b>Labelled and sourced.</b> Each step labels its rulings by category (fard, wajib, sunnah, recommended) per school and cites its sources: Qur'an references, hadith with standard numbering, and a standard reference text for each school.</li>
+    </ul>
+
+    <h3>Accessibility and reach</h3>
+    <ul class="did">
+      <li><b>Three languages</b> — English, Bengali and Arabic — with a mirrored layout for Arabic and native numerals.</li>
+      <li><b>Built for everyone:</b> keyboard navigation and shortcuts, screen-reader announcements, reduced motion, high contrast and larger text.</li>
+      <li><b>A 2D fallback.</b> If 3D isn't available on a device, the app falls back to 2D illustrations generated from the same pose data.</li>
+      <li><b>No account needed.</b> Progress is saved on the device, and it runs on desktop and mobile.</li>
+    </ul>
+
+    <div class="two-col">
+      <div><h3>Key skills</h3><div class="chips"><span>Inverse kinematics</span><span>Procedural 3D</span><span>Scroll-driven animation</span><span>Internationalisation &amp; RTL</span><span>Accessibility</span><span>Content modelling</span></div></div>
+      <div><h3>Tech stack</h3><div class="chips"><span>React 19</span><span>TypeScript</span><span>Vite</span><span>Three.js</span><span>React Three Fiber</span><span>Drei</span><span>Tailwind CSS 4</span><span>Motion</span><span>Zustand</span><span>Vercel</span><span>GitHub Pages</span></div></div>
+    </div>
+
+    <div class="pbtns" style="margin-top:18px">
+      <a class="btn demo-btn" href="https://learn-salah.vercel.app" target="_blank" rel="noopener">▶ Open Learn Salah ↗</a>
+      <a class="btn a" href="https://github.com/zadeedhaque/Learn-Salah" target="_blank" rel="noopener">View code on GitHub ↗</a>
       <button type="button" class="btn b" data-close>Close</button>
     </div>
   </div>
