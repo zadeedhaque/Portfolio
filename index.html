@@ -633,8 +633,9 @@ dialog.case#mc-dlg{width:min(1040px,calc(100vw - 32px))}
 @media (prefers-reduced-motion:reduce){.proj.feat.glow{animation:none}}
 
 
-#copied[hidden]{display:none}
-#copied{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--bg);background:var(--teal);padding:5px 10px;border-radius:8px}
+#copied{display:inline-flex;align-items:center;margin-top:12px;font-family:var(--mono);font-size:12px;font-weight:700;line-height:1.5;color:var(--teal);background:transparent;border:1px solid color-mix(in srgb,var(--teal) 55%,transparent);padding:5px 11px;border-radius:8px;cursor:copy;transition:color .25s,background-color .25s,border-color .25s}
+#copied:hover{border-color:var(--teal)}
+#copied.done{color:var(--bg);background:var(--teal);border-color:var(--teal);cursor:default}
 .mail{cursor:copy}
 
 /* 60 projects */
@@ -1607,7 +1608,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
     <div class="cbox">
       <div>
         <div class="eyebrow">09 · Contact</div>
-        <a class="mail" href="mailto:zadeedhuq2018@gmail.com" title="Click to copy">zadeedhuq2018<br>@gmail.com</a><br><span id="copied" hidden role="status">Email copied ✓</span>
+        <a class="mail" href="mailto:zadeedhuq2018@gmail.com" title="Tap to copy">zadeedhuq2018<br>@gmail.com</a><br><button type="button" id="copied" aria-live="polite">Tap to copy</button>
         <p style="margin-top:18px">Internships, freelance web &amp; design work, video, or an AI idea you want to prototype — I'm in.</p>
       </div>
       <div class="hello">
@@ -2599,18 +2600,18 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
     requestAnimationFrame(step);
   });
 
-  /* email: copy address on click */
-  const mail = document.querySelector('.mail');
-  if (mail) mail.addEventListener('click', e => {
-    const addr = 'zadeedhuq2018@gmail.com';
-    if (navigator.clipboard) {
-      e.preventDefault();
-      navigator.clipboard.writeText(addr).then(() => {
-        const t = document.getElementById('copied'); t.hidden = false;
-        clearTimeout(t._h); t._h = setTimeout(() => t.hidden = true, 1800);
-      }, () => { location.href = 'mailto:' + addr; });
-    }
-  });
+  /* email: tap the address or the chip under it to copy; the chip confirms */
+  const mail = document.querySelector('.mail'), chip = document.getElementById('copied');
+  const addr = 'zadeedhuq2018@gmail.com';
+  const copyMail = e => {
+    e.preventDefault();
+    if (!navigator.clipboard) { location.href = 'mailto:' + addr; return; }
+    navigator.clipboard.writeText(addr).then(() => {
+      chip.textContent = 'Email copied ✓'; chip.classList.add('done');
+      clearTimeout(chip._h); chip._h = setTimeout(() => { chip.textContent = 'Tap to copy'; chip.classList.remove('done'); }, 2500);
+    }, () => { location.href = 'mailto:' + addr; });
+  };
+  if (mail && chip) { mail.addEventListener('click', copyMail); chip.addEventListener('click', copyMail); }
   /* per-letter solid colour cycle */
   document.querySelectorAll('.big .s, .mail').forEach(el => {
     let i = 0;
