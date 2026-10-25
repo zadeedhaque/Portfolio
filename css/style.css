@@ -978,3 +978,50 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .menu{display:flex;order:3;width:100%;margin-left:0;overflow-x:auto;scrollbar-width:none}
   .menu a{white-space:nowrap}
 }
+
+/* ---- Cloud Computing Architecture (academics) ---- */
+.proj.linked .stretch{color:inherit;text-decoration:none}
+.proj.linked .stretch::after{content:"";position:absolute;inset:0;z-index:1}
+.proj.linked .pbtns{position:relative;z-index:2}
+.ani-cloud .nd{stroke-width:1.2}
+.cc-back{display:inline-block;font-family:var(--mono);font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:22px}
+.cc-back:hover{color:var(--sun)}
+.cc-stats{margin-bottom:54px}
+.cc-sec{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:clamp(38px,5vw,64px);margin:56px 0 24px}
+.cc-sec em{font-style:normal;color:var(--sun)}
+.cc-list{display:grid;gap:28px}
+.cc-proj{background:var(--bg2);border:1px solid var(--line);border-radius:24px;padding:clamp(22px,3.5vw,40px);display:grid;gap:14px;border-top:3px solid var(--c)}
+.cc-head{display:flex;gap:18px;align-items:flex-start}
+.cc-n{font-family:var(--disp);font-weight:900;font-size:64px;line-height:.8;color:var(--c)}
+.cc-proj .k,.cc-wk .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--c)}
+.cc-proj h2{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:clamp(30px,4vw,48px);line-height:.95;margin-top:6px}
+.cc-proj h3,.cc-wk h3{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:24px;color:var(--c);margin-top:12px}
+.cc-proj .lead{color:var(--muted);font-size:17px;max-width:70ch}
+.cc-proj .muted{color:var(--muted)}
+.cc-proj .chips span{background:var(--bg);border:1px solid var(--line)}
+.cc-prob{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cc-prob div{background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--c);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--muted)}
+.cc-weeks{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.cc-wk{background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:22px 24px;border-top:3px solid var(--c);display:grid;gap:8px;align-content:start}
+.cc-wk .did{font-size:14.5px}
+@media (max-width:860px){.cc-prob{grid-template-columns:1fr 1fr}.cc-n{font-size:44px}}
+@media (max-width:520px){.cc-prob{grid-template-columns:1fr}}
+/* diagrams */
+.diag{margin:6px 0;padding:14px;border:1px solid var(--line);border-radius:18px;background:radial-gradient(circle at 85% 10%,color-mix(in srgb,var(--c) 22%,transparent),transparent 55%),var(--bg)}
+.diag svg,.ani-cloud svg{width:100%;height:auto;display:block}
+.ani-cloud svg{height:100%}
+.diag figcaption{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:8px}
+.diag .ct,.ani-cloud .ct{fill:color-mix(in srgb,var(--teal) 5%,transparent);stroke:var(--teal);stroke-width:1.2;stroke-dasharray:6 5}
+.diag .az{fill:rgba(255,255,255,.03);stroke:rgba(255,255,255,.2)}
+.diag .sn{fill:rgba(255,210,63,.07);stroke:rgba(255,210,63,.5)}
+.diag .sn.pv{fill:rgba(122,77,255,.1);stroke:rgba(160,130,255,.55)}
+.diag .tc{font:600 9.5px var(--mono);fill:var(--muted);letter-spacing:.06em}
+.nd{fill:var(--bg2);stroke-width:1.4}
+.c-t{stroke:var(--teal)}.c-s{stroke:var(--sun)}.c-m{stroke:var(--mag)}.c-p{stroke:#a082ff}
+.tl{font-family:var(--mono);font-weight:700;fill:var(--text)}
+.ts{font-family:var(--mono);fill:var(--muted)}
+.tn{font:600 10px var(--mono);fill:var(--muted);letter-spacing:.06em}
+.fl{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-dasharray:3 7;animation:aniDash 1s linear infinite}
+.f-t{stroke:var(--teal)}.f-s{stroke:var(--sun)}.f-m{stroke:var(--mag)}.f-p{stroke:#a082ff}
+.ah{fill:var(--muted)}
+@media (prefers-reduced-motion:reduce){.fl{animation:none}}
