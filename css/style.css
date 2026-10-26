@@ -1025,3 +1025,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .f-t{stroke:var(--teal)}.f-s{stroke:var(--sun)}.f-m{stroke:var(--mag)}.f-p{stroke:#a082ff}
 .ah{fill:var(--muted)}
 @media (prefers-reduced-motion:reduce){.fl{animation:none}}
+
+/* single-column timeline */
+.tl.one{grid-template-columns:1fr}
+.tl.one .items{max-width:820px}
