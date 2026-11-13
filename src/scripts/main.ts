@@ -8,6 +8,15 @@ import { initRipple } from "./ripple";
 import { initSite } from "./site";
 import { initTilt } from "./tilt";
 
+// Fade the loading cover as soon as the page has really loaded. If the CSS
+// fallback already hid it, leave it alone so it does not flash back.
+const loaded = () => {
+  const cover = document.querySelector(".loader");
+  if (cover && getComputedStyle(cover).visibility !== "hidden") document.documentElement.classList.add("loaded");
+};
+if (document.readyState === "complete") loaded();
+else addEventListener("load", loaded, { once: true });
+
 initSite();
 initCursor();
 initRipple();

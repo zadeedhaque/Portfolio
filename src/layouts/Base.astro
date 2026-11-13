@@ -24,9 +24,11 @@ const { title, description } = Astro.props;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <script is:inline src="/boot.js"></script>
   </head>
   <body data-pal="blue">
+    <div class="loader" aria-hidden="true"><i class="logo"></i><span class="sweep"></span></div>
     <div id="progress"></div>
     <canvas id="water" aria-hidden="true"></canvas>
     <div class="cur" id="cur-ring" aria-hidden="true"></div>

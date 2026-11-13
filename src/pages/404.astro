@@ -1,11 +1,34 @@
 ---
 import Base from "../layouts/Base.astro";
+
+// "404" drawn in the same 5×7 pixel bricks as the hero game.
+const GLYPHS: Record<string, string[]> = {
+  "4": ["10010", "10010", "10010", "11111", "00010", "00010", "00010"],
+  "0": ["01110", "10001", "10011", "10101", "11001", "10001", "01110"],
+};
+const digits = ["4", "0", "4"];
+const cells: { on: boolean; hot: boolean; fall: boolean; col: number }[] = [];
+for (let row = 0; row < 7; row++)
+  digits.forEach((digit, d) => {
+    [...GLYPHS[digit]![row]!].forEach((bit, x) => {
+      const col = d * 6 + x;
+      // A few bricks drop out after the build-in, as if the ball already hit them.
+      cells.push({ on: bit === "1", hot: d === 1, fall: bit === "1" && (col * 7 + row * 3) % 11 === 0, col });
+    });
+    if (d < 2) cells.push({ on: false, hot: false, fall: false, col: d * 6 + 5 });
+  });
 ---
 
 <Base title="Page not found · Zadeed Haque" description="This page does not exist.">
   <div class="wrap notfound" data-section="hero">
+    <div class="pixels" aria-hidden="true">
+      {cells.map((c) => <i class:list={["px", `c${c.col}`, { on: c.on, hot: c.hot, fall: c.fall }]} />)}
+    </div>
     <h1>Nothing <em>here.</em></h1>
-    <p>That page does not exist, or it moved in the redesign.</p>
-    <a class="btn primary" href="/">Back home <span class="arr">→</span></a>
+    <p>This page got knocked out. It does not exist, or it moved in the redesign.</p>
+    <div class="cta">
+      <a class="btn primary" href="/">Back home <span class="arr">→</span></a>
+      <a class="btn" href="/#work">See the work <span class="arr">↓</span></a>
+    </div>
   </div>
 </Base>
