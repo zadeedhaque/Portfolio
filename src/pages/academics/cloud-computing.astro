@@ -1,0 +1,25 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import VideoSlot from "../../components/VideoSlot.astro";
+
+const entry = await getEntry("case-studies", "cloud-computing");
+if (!entry) throw new Error("Missing case study: src/content/case-studies/cloud-computing.md");
+const { Content } = await render(entry);
+const title = entry.data.title;
+---
+
+<Base title={`${title} · Zadeed Haque`} description="One Photo Album app built three ways on AWS: a first deployment, a highly available rebuild and a serverless, event-driven redesign.">
+  <div class="wrap page-top" data-section="hero">
+    <a class="back" href="/academics">← Back to Academics</a>
+    <h1>Cloud Computing <em>Architecture</em></h1>
+    <p class="summary">One app, built three ways on AWS: a first deployment, a highly available rebuild, and a serverless redesign.</p>
+    <ul class="chips"><li>Swinburne</li><li>AWS</li><li>3 assignments</li></ul>
+  </div>
+  <section class="study" data-section="work">
+    <div class="wrap">
+      <VideoSlot title={title} />
+      <article class="prose"><Content /></article>
+    </div>
+  </section>
+</Base>
