@@ -1,0 +1,48 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import VideoSlot from "../../components/VideoSlot.astro";
+import { projects } from "../../data/projects";
+
+export function getStaticPaths() {
+  return projects.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const index = projects.findIndex((p) => p.slug === slug);
+const project = projects[index]!;
+// Previous / next wrap around the list.
+const prev = projects[(index - 1 + projects.length) % projects.length]!;
+const next = projects[(index + 1) % projects.length]!;
+
+const entry = await getEntry("case-studies", project.slug);
+if (!entry) throw new Error(`Missing case study: src/content/case-studies/${project.slug}.md`);
+const { Content } = await render(entry);
+---
+
+<Base title={`${project.name} · Zadeed Haque`} description={`${project.name}: ${project.summary} A project by Zadeed Haque.`}>
+  <div class="wrap page-top" data-section="hero">
+    <a class="back" href="/#work">← All work</a>
+    <h1>{project.name}</h1>
+    <p class="summary">{project.summary}</p>
+    <ul class="chips">{project.tags.map((t) => <li>{t}</li>)}</ul>
+    {
+      (project.play || project.code) && (
+        <div class="cta">
+          {project.play && <a class="btn primary" href={project.play} target="_blank" rel="noopener noreferrer">Open it <span class="arr">↗</span></a>}
+          {project.code && <a class="btn" href={project.code} target="_blank" rel="noopener noreferrer">GitHub <span class="arr">↗</span></a>}
+        </div>
+      )
+    }
+  </div>
+  <section class="study" data-section="work">
+    <div class="wrap">
+      <VideoSlot title={project.name} video={project.video} poster={project.poster} />
+      <article class="prose"><Content /></article>
+      <nav class="pager" aria-label="More projects">
+        <a class="btn" href={`/work/${prev.slug}`}><span class="arr">←</span> Previous: {prev.name}</a>
+        <a class="btn" href={`/work/${next.slug}`}>Next: {next.name} <span class="arr">→</span></a>
+      </nav>
+    </div>
+  </section>
+</Base>

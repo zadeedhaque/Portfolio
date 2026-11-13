@@ -1,0 +1,11 @@
+---
+// One tile cropped from public/logo-sheet.webp. The tile shown follows the
+// --lx / --ly variables of the current palette (see tokens.css).
+interface Props {
+  id?: string;
+  class?: string;
+}
+const { id, class: cls } = Astro.props;
+---
+
+<i class:list={["logo", cls]} id={id} aria-hidden="true"></i>

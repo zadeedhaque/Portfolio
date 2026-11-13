@@ -1,0 +1,28 @@
+---
+import Logo from "./Logo.astro";
+
+// The glass slab: nine stacked slices give the edge its thickness, the logo sits
+// on both sides, and two faces carry the sheen and glow. src/scripts/glass.ts spins it.
+const slices = Array.from({ length: 9 });
+---
+
+<section id="studio" data-section="studio">
+  <div class="wrap">
+    <div class="studio rv">
+      <div class="scene" id="scene" data-cursor="Tap" tabindex="0" role="button" aria-label="Spinning glass logo. Tap or press Enter to change its colours. Drag or use the arrow keys to spin.">
+        <div class="glass" id="glass">
+          {slices.map(() => <i class="slice" />)}
+          <Logo class="a" />
+          <Logo class="b" />
+          <i class="face front"></i>
+          <i class="face back"></i>
+        </div>
+      </div>
+      <div>
+        <h3>Zeedio</h3>
+        <p>My web studio in Melbourne.</p>
+      </div>
+      <a class="btn" href="https://zeedio.zadeedhaque.com/" target="_blank" rel="noopener noreferrer">Visit <span class="arr">↗</span></a>
+    </div>
+  </div>
+</section>

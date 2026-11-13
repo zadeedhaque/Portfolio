@@ -1,0 +1,18 @@
+---
+const links = [
+  ["LinkedIn", "https://www.linkedin.com/in/zadeed-haque-496528217/"],
+  ["GitHub", "https://github.com/zadeedhaque"],
+  ["YouTube", "https://www.youtube.com/@ZadeedHaque"],
+  ["Instagram", "https://www.instagram.com/zadzzd/"],
+  ["Facebook", "https://www.facebook.com/zadeed.ccaa.7"],
+] as const;
+---
+
+<section id="contact" class="contact" data-section="contact">
+  <div class="wrap">
+    <h2 class="rv">Say <em>hello.</em></h2>
+    <div class="cta rv d1">
+      {links.map(([label, url], i) => <a class:list={["btn", { primary: i === 0 }]} href={url} target="_blank" rel="noopener noreferrer">{label} <span class="arr">↗</span></a>)}
+    </div>
+  </div>
+</section>

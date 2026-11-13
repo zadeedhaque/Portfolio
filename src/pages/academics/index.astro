@@ -1,0 +1,32 @@
+---
+import Base from "../../layouts/Base.astro";
+import Card from "../../components/Card.astro";
+import { coursework, scores, study } from "../../data/academics";
+---
+
+<Base title="Academics · Zadeed Haque" description="Zadeed Haque's study timeline and coursework: Computer Science (AI major) at Swinburne, CSE at BRAC University, and AWS cloud architecture projects.">
+  <div class="wrap page-top" data-section="hero">
+    <div class="head rv">
+      <h1>Study <em>timeline</em></h1>
+    </div>
+    <ol class="timeline rv d1">
+      {
+        study.map((row) => (
+          <li>
+            <span class="label">{row.when}</span>
+            <strong>{row.school}<small>{row.detail}</small></strong>
+          </li>
+        ))
+      }
+    </ol>
+    <ul class="chips more rv d2" aria-label="Scores and certificates">{scores.map((s) => <li>{s}</li>)}</ul>
+  </div>
+  <section data-section="work">
+    <div class="wrap">
+      <div class="head rv"><h2>Course<em>work</em></h2></div>
+      <div class="grid">
+        {coursework.map((c, i) => <Card name={c.name} summary={c.summary} tags={[]} href={c.href} delay={i % 3} />)}
+      </div>
+    </div>
+  </section>
+</Base>

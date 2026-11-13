@@ -1,0 +1,23 @@
+---
+// A 16:9 demo video. Until a video path is set in the data file this renders
+// an empty placeholder, so adding a video later needs no markup change.
+interface Props {
+  title: string;
+  /** Path under public/, e.g. "/media/lava-lift.mp4". */
+  video?: string;
+  poster?: string;
+}
+const { title, video, poster } = Astro.props;
+---
+
+{
+  video ? (
+    <video class="video" controls muted playsinline preload="metadata" poster={poster} aria-label={`Video demo of ${title}`}>
+      <source src={video} />
+    </video>
+  ) : (
+    <div class="slot video-slot" role="img" aria-label={`Video demo of ${title}, coming soon`}>
+      <span class="label">Video demo coming soon</span>
+    </div>
+  )
+}

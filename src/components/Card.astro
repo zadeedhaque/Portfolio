@@ -1,0 +1,31 @@
+---
+interface Props {
+  name: string;
+  summary: string;
+  tags: string[];
+  /** Internal page the title links to. */
+  href?: string;
+  /** Main external link, e.g. the live build. */
+  primary?: { label: string; url: string };
+  /** Source repository. */
+  code?: string;
+  /** Reveal stagger step, 0 to 2. */
+  delay?: number;
+}
+const { name, summary, tags, href, primary, code, delay = 0 } = Astro.props;
+---
+
+<article class:list={["card", "rv", `d${delay}`]}>
+  <div class="slot"></div>
+  <h3>{href ? <a href={href}>{name}</a> : name}</h3>
+  <p>{summary}</p>
+  {tags.length > 0 && <ul class="chips">{tags.map((t) => <li>{t}</li>)}</ul>}
+  {
+    (primary || code) && (
+      <div class="links">
+        {primary && <a href={primary.url} target="_blank" rel="noopener noreferrer" aria-label={`${primary.label} ${name}`}>▶ {primary.label}</a>}
+        {code && <a href={code} target="_blank" rel="noopener noreferrer" aria-label={`${name} on GitHub`}>GitHub ↗</a>}
+      </div>
+    )
+  }
+</article>

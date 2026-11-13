@@ -1,6 +1,6 @@
 # zadeedhaque.com redesign: design spec
 
-Date: 2026-11-13 · Status: draft, awaiting Zadeed's approval
+Date: 2026-11-13 · Status: built (2026-11-13), see README.md
 Reference build: `docs/superpowers/reference/demo/index.html` (throwaway demo, approved look and feel)
 
 ## Intent

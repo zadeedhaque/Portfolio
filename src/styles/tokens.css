@@ -1,0 +1,20 @@
+:root {
+  --font: "Inter Variable", system-ui, sans-serif;
+  --display: "Space Grotesk Variable", "Inter Variable", system-ui, sans-serif;
+  --radius: 18px;
+  --wrap: 1180px;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  font-synthesis: none;
+}
+/* Developer palettes: vibrant, high contrast */
+body[data-pal="blue"]   { --bg:#10254a; --surface:#17305e; --line:#2f4f8a; --text:#eef3ff; --muted:#bccbe6; --accent:#c8f24a; --accent-text:#c8f24a; --on-accent:#111111; --lx:789;  --ly:590; color-scheme:dark; }
+body[data-pal="forest"] { --bg:#0f2a1e; --surface:#163828; --line:#2a5a41; --text:#f3efe2; --muted:#b9cbbf; --accent:#c8f24a; --accent-text:#c8f24a; --on-accent:#111111; --lx:1384; --ly:110; color-scheme:dark; }
+body[data-pal="plum"]   { --bg:#2a1230; --surface:#381a40; --line:#5e3168; --text:#f6ecf5; --muted:#d3bfd6; --accent:#ffb84a; --accent-text:#ffb84a; --on-accent:#111111; --lx:789;  --ly:110; color-scheme:dark; }
+body[data-pal="olive"]  { --bg:#1c1f14; --surface:#272b1c; --line:#474d33; --text:#f2f0e0; --muted:#c2c4ad; --accent:#ff7a45; --accent-text:#ff8a5b; --on-accent:#111111; --lx:190;  --ly:590; color-scheme:dark; }
+body[data-pal="paper"]  { --bg:#f4f3ee; --surface:#ffffff; --line:#d9d6cc; --text:#15151c; --muted:#55535f; --accent:#1f6b3a; --accent-text:#1a5c32; --on-accent:#ffffff; --lx:1384; --ly:590; color-scheme:light; }
+/* Creator palettes: from the logo colourways */
+body[data-pal="white"]  { --bg:#f5f3ef; --surface:#ffffff; --line:#dcd7cf; --text:#2b2b2b; --muted:#5c5650; --accent:#f73650; --accent-text:#c2163a; --on-accent:#111111; --lx:190;  --ly:110; color-scheme:light; }
+body[data-pal="red"]    { --bg:#f73650; --surface:#ff7386; --line:#c21f3a; --text:#161616; --muted:#2b0d12; --accent:#ffffff; --accent-text:#161616; --on-accent:#161616; --lx:789;  --ly:110; color-scheme:light; }
+body[data-pal="black"]  { --bg:#1f1f1f; --surface:#2a2a2a; --line:#3d3d3d; --text:#ffffff; --muted:#b4b4b4; --accent:#d98d57; --accent-text:#e09a68; --on-accent:#1f1f1f; --lx:190;  --ly:590; color-scheme:dark; }
+body[data-pal="sage"]   { --bg:#44594f; --surface:#4a6056; --line:#6b8378; --text:#f1e3cf; --muted:#d6dfd8; --accent:#e8a36f; --accent-text:#f1e3cf; --on-accent:#1b1b1b; --lx:1384; --ly:110; color-scheme:dark; }
+body[data-pal="teal"]   { --bg:#1d3536; --surface:#254243; --line:#38595a; --text:#ead9bf; --muted:#b5c4c0; --accent:#f73650; --accent-text:#d4ba95; --on-accent:#111111; --lx:1384; --ly:590; color-scheme:dark; }
