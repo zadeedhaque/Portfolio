@@ -1,0 +1,24 @@
+---
+import Card from "./Card.astro";
+import { projects } from "../data/projects";
+import { roles } from "../data/roles";
+---
+
+<section id="work" data-section="work">
+  <div class="wrap">
+    <div class="head rv">
+      <h2 data-show="dev">Things I <em>built</em></h2>
+      <h2 data-show="creator">Things I <em>made</em></h2>
+    </div>
+    <div class="grid" data-show="dev">
+      {
+        projects.map((p, i) => (
+          <Card name={p.name} summary={p.summary} tags={p.tags} href={`/work/${p.slug}`} primary={p.play ? { label: "Open", url: p.play } : undefined} code={p.code} delay={i % 3} />
+        ))
+      }
+    </div>
+    <div class="grid" data-show="creator">
+      {roles.map((r, i) => <Card name={r.name} summary={r.summary} tags={r.tags} primary={r.watch ? { label: "Watch", url: r.watch } : undefined} delay={i % 3} />)}
+    </div>
+  </div>
+</section>

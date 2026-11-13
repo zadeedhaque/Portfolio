@@ -1,0 +1,26 @@
+---
+import { devTimeline, creatorTimeline } from "../data/academics";
+---
+
+<section id="about" data-section="about">
+  <div class="wrap">
+    <div class="head rv"><h2>Code. Create. <em>Solve.</em></h2></div>
+    <div class="about">
+      <div class="rv" data-show="dev">
+        <p class="lede">CS and AI at Swinburne. I like things you can poke at.</p>
+        <ul class="chips"><li>TypeScript</li><li>Python</li><li>Java</li><li>C++</li><li>React</li><li>Three.js</li><li>TensorFlow</li><li>AWS</li></ul>
+        <a class="btn more" href="/academics">Academics <span class="arr">→</span></a>
+      </div>
+      <div class="rv" data-show="creator">
+        <p class="lede">Years behind the edit. I still think like an editor.</p>
+        <ul class="chips"><li>Premiere Pro</li><li>After Effects</li><li>Illustrator</li><li>Streamlabs</li><li>DSLR</li><li>Lighting</li></ul>
+      </div>
+      <ol class="timeline rv d2" data-show="dev">
+        {devTimeline.map((row) => <li><span class="label">{row.when}</span><strong>{row.what}</strong></li>)}
+      </ol>
+      <ol class="timeline rv d2" data-show="creator">
+        {creatorTimeline.map((row) => <li><span class="label">{row.when}</span><strong>{row.what}</strong></li>)}
+      </ol>
+    </div>
+  </div>
+</section>

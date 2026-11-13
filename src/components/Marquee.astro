@@ -1,0 +1,12 @@
+---
+import { devWords } from "../data/projects";
+import { creatorWords } from "../data/roles";
+
+// Each list is rendered twice so the -50% slide loops without a seam.
+const twice = (words: string[]) => [...words, ...words];
+---
+
+<div class="marquee" aria-hidden="true">
+  <div class="track" data-show="dev">{twice(devWords).map((w) => <><span>{w}</span><i>✦</i></>)}</div>
+  <div class="track" data-show="creator">{twice(creatorWords).map((w) => <><span>{w}</span><i>✦</i></>)}</div>
+</div>
