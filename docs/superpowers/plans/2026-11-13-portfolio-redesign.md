@@ -74,9 +74,9 @@ tests/unit/*.test.ts, tests/e2e/*.spec.ts
 - Produces: `Base.astro` props `{ title: string; description: string }`, rendering `<body data-pal="blue">` and `<html data-mode="dev" data-theme="auto">`. `Logo.astro` props `{ size?: number; id?: string }`. npm scripts: `dev`, `build`, `preview`, `test` (vitest run), `e2e` (playwright against `astro preview` on port 4321).
 - Produces CSS custom properties on `body[data-pal=…]`: `--bg --surface --line --text --muted --accent --accent-text --on-accent --lx --ly`. Palette names: `blue forest plum olive paper white red black sage teal`. Copy every value from the demo's `body[data-pal="…"]` rules.
 
-- [ ] **Step 1: Scaffold.** Create an empty Astro project in the repo root with TypeScript strict; add Vitest, Playwright, `@axe-core/playwright`, the two fontsource packages. Copy `docs/superpowers/reference/demo/assets/logo-sheet.webp` to `public/`. Leave the old `*.html`, `css/`, `js/` files in place for now; Task 9 removes them. Old root `*.html` files are not inside `src/`, so they do not affect the build.
+- [x] **Step 1: Scaffold.** Create an empty Astro project in the repo root with TypeScript strict; add Vitest, Playwright, `@axe-core/playwright`, the two fontsource packages. Copy `docs/superpowers/reference/demo/assets/logo-sheet.webp` to `public/`. Leave the old `*.html`, `css/`, `js/` files in place for now; Task 9 removes them. Old root `*.html` files are not inside `src/`, so they do not affect the build.
 
-- [ ] **Step 2: Write the failing build-output test** (`tests/e2e/build-output.spec.ts`, reads `dist/` from disk, no browser):
+- [x] **Step 2: Write the failing build-output test** (`tests/e2e/build-output.spec.ts`, reads `dist/` from disk, no browser):
 
 ```ts
 test("built HTML has no inline script, inline style attribute or third-party origin", () => {
@@ -99,15 +99,15 @@ test("vercel.json sets the security headers", () => {
 });
 ```
 
-- [ ] **Step 3: Run it.** `npm run build && npx playwright test build-output` → FAIL (no `vercel.json`; default Astro output may inline small scripts or styles).
+- [x] **Step 3: Run it.** `npm run build && npx playwright test build-output` → FAIL (no `vercel.json`; default Astro output may inline small scripts or styles).
 
-- [ ] **Step 4: Implement.** `vercel.json` with the headers above; full CSP: `default-src 'self'; img-src 'self' data:; media-src 'self'; style-src 'self'; script-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'`. Configure Astro so scripts and stylesheets are always emitted as external files. `tokens.css`: the ten palettes plus `--font`, `--display`, `--radius: 18px`, `--wrap: 1180px`, `--ease: cubic-bezier(.2,.7,.2,1)`. `base.css`: port the demo's non-palette CSS; stagger delays become classes `.d1 .d2 .d3` instead of inline `--i`. `Header.astro`: brand (Logo + "Zadeed Haque"), nav `Work /#work`, `About /#about`, `Academics /academics`, `Contact /#contact`, mode switch buttons `data-set="dev"` labelled "Developer" and `data-set="creator"` labelled "Creator", theme button `#theme`. `Footer.astro`: "© 2026 Zadeed Haque · Melbourne".
+- [x] **Step 4: Implement.** `vercel.json` with the headers above; full CSP: `default-src 'self'; img-src 'self' data:; media-src 'self'; style-src 'self'; script-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'`. Configure Astro so scripts and stylesheets are always emitted as external files. `tokens.css`: the ten palettes plus `--font`, `--display`, `--radius: 18px`, `--wrap: 1180px`, `--ease: cubic-bezier(.2,.7,.2,1)`. `base.css`: port the demo's non-palette CSS; stagger delays become classes `.d1 .d2 .d3` instead of inline `--i`. `Header.astro`: brand (Logo + "Zadeed Haque"), nav `Work /#work`, `About /#about`, `Academics /academics`, `Contact /#contact`, mode switch buttons `data-set="dev"` labelled "Developer" and `data-set="creator"` labelled "Creator", theme button `#theme`. `Footer.astro`: "© 2026 Zadeed Haque · Melbourne".
 
-- [ ] **Step 5: Smoke test** (`tests/e2e/smoke.spec.ts`): home returns 200, `<title>` is "Zadeed Haque", zero console errors, `document.fonts.check('700 20px "Space Grotesk Variable"')` true, no element computes a font-family containing "Mono", no horizontal scroll at 375 px.
+- [x] **Step 5: Smoke test** (`tests/e2e/smoke.spec.ts`): home returns 200, `<title>` is "Zadeed Haque", zero console errors, `document.fonts.check('700 20px "Space Grotesk Variable"')` true, no element computes a font-family containing "Mono", no horizontal scroll at 375 px.
 
-- [ ] **Step 6: Run all.** `npm run build && npm run e2e` → PASS.
+- [x] **Step 6: Run all.** `npm run build && npm run e2e` → PASS.
 
-- [ ] **Step 7: Commit** `feat: scaffold Astro site with tokens, layout and security headers`.
+- [x] **Step 7: Commit** `feat: scaffold Astro site with tokens, layout and security headers`.
 
 ---
 
@@ -133,7 +133,7 @@ export const coursework: { name: string; summary: string; href?: string }[]   //
 ```
 - Content collection `case-studies`, schema `{ title: string }`, entry id equals the project slug.
 
-- [ ] **Step 1: Write the failing test:**
+- [x] **Step 1: Write the failing test:**
 
 ```ts
 test("ten projects with unique slugs and https links", () => {
@@ -148,11 +148,11 @@ test("every project has a case study file, plus cloud-computing", () => {
 test("seven roles, four coursework items", () => { expect(roles).toHaveLength(7); expect(coursework).toHaveLength(4); });
 ```
 
-- [ ] **Step 2: Run** `npm test -- data` → FAIL.
+- [x] **Step 2: Run** `npm test -- data` → FAIL.
 
-- [ ] **Step 3: Implement.** Names, summaries, tags and URLs: copy from the demo's `DATA` object. Case-study bodies: migrate the text of each `<div class="case">` modal in the old `work.html` to Markdown, keeping its headings (How it works, What I built, Key skills, Tech stack and so on); `cloud-computing.md` from the old `cloud-computing.html`. Drop every `<img>` and inline SVG diagram; where one stood, leave nothing.
+- [x] **Step 3: Implement.** Names, summaries, tags and URLs: copy from the demo's `DATA` object. Case-study bodies: migrate the text of each `<div class="case">` modal in the old `work.html` to Markdown, keeping its headings (How it works, What I built, Key skills, Tech stack and so on); `cloud-computing.md` from the old `cloud-computing.html`. Drop every `<img>` and inline SVG diagram; where one stood, leave nothing.
 
-- [ ] **Step 4: Run** `npm test -- data` → PASS. **Step 5: Commit** `feat: add project, role and academics data with migrated case studies`.
+- [x] **Step 4: Run** `npm test -- data` → PASS. **Step 5: Commit** `feat: add project, role and academics data with migrated case studies`.
 
 ---
 
@@ -176,7 +176,7 @@ export function nextTheme(t: Theme): Theme                     // auto → light
 ```
 - `public/boot.js`: a classic script loaded in `<head>` before first paint that sets `data-mode` and `data-theme` on `<html>` from storage, inside try/catch.
 
-- [ ] **Step 1: Write the failing tests:**
+- [x] **Step 1: Write the failing tests:**
 
 ```ts
 test.each([
@@ -199,8 +199,8 @@ test("readPrefs ignores junk values", () => {
 });
 ```
 
-- [ ] **Step 2: Run** → FAIL. **Step 3: Implement** the four functions and `boot.js`. **Step 4: Run** → PASS.
-- [ ] **Step 5: e2e** (`prefs.spec.ts`): with `localStorage` overridden to throw via `addInitScript`, the home page loads with zero console errors and `html[data-mode="dev"]`. **Step 6: Commit** `feat: add storage-safe preferences and palette resolver`.
+- [x] **Step 2: Run** → FAIL. **Step 3: Implement** the four functions and `boot.js`. **Step 4: Run** → PASS.
+- [x] **Step 5: e2e** (`prefs.spec.ts`): with `localStorage` overridden to throw via `addInitScript`, the home page loads with zero console errors and `html[data-mode="dev"]`. **Step 6: Commit** `feat: add storage-safe preferences and palette resolver`.
 
 ---
 
@@ -216,7 +216,7 @@ test("readPrefs ignores junk values", () => {
 - Produces: every section root carries `data-section="<Section>"`. Mode-specific markup carries `data-show="dev"` or `data-show="creator"`. `site.ts` dispatches `window` events `modechange` (`detail: Mode`) and `palettechange` (`detail: PaletteName`) after updating the DOM; the game and fluid mounts listen to these.
 - Produces: `Card.astro` props `{ name: string; summary: string; tags: string[]; href?: string; primary?: { label: string; url: string }; code?: string }`. Developer cards link their title to `/work/<slug>`.
 
-- [ ] **Step 1: Write the failing tests:**
+- [x] **Step 1: Write the failing tests:**
 
 ```ts
 test("Developer shows 10 cards, Creator shows 7", async ({ page }) => {
@@ -252,9 +252,9 @@ test("with JavaScript off, Developer content is visible", async ({ browser }) =>
 });
 ```
 
-- [ ] **Step 2: Run** → FAIL.
-- [ ] **Step 3: Implement.** Copy all visible copy from the demo (hero lines, About ledes, chips, Off-the-clock tiles, Zeedio line "My web studio in Melbourne."). Contact URLs: LinkedIn `https://www.linkedin.com/in/zadeed-haque-496528217/`, GitHub `https://github.com/zadeedhaque`, YouTube `https://www.youtube.com/@ZadeedHaque`, Instagram `https://www.instagram.com/zadzzd/`, Facebook `https://www.facebook.com/zadeed.ccaa.7`. `site.ts`: mode switch and "Creator side / Developer side" button; theme button cycling with glyph and label (◐ Auto, ☀ Light, ☾ Dark) and an updated `aria-label`; an `IntersectionObserver` with `rootMargin: "-45% 0px -45% 0px"` that sets `body[data-pal]` via `resolvePalette`, plus the page-end rule (within 80 px of the bottom, use the last section); reveal observer that adds `.in`; scroll progress bar. The reveal's hidden state applies only under `html.js`, a class `site.ts` adds. Header logo plays a short pop when the palette changes.
-- [ ] **Step 4: Run** `npm run build && npm run e2e -- home` → PASS. **Step 5: Commit** `feat: build home sections with mode, theme and scroll palettes`.
+- [x] **Step 2: Run** → FAIL.
+- [x] **Step 3: Implement.** Copy all visible copy from the demo (hero lines, About ledes, chips, Off-the-clock tiles, Zeedio line "My web studio in Melbourne."). Contact URLs: LinkedIn `https://www.linkedin.com/in/zadeed-haque-496528217/`, GitHub `https://github.com/zadeedhaque`, YouTube `https://www.youtube.com/@ZadeedHaque`, Instagram `https://www.instagram.com/zadzzd/`, Facebook `https://www.facebook.com/zadeed.ccaa.7`. `site.ts`: mode switch and "Creator side / Developer side" button; theme button cycling with glyph and label (◐ Auto, ☀ Light, ☾ Dark) and an updated `aria-label`; an `IntersectionObserver` with `rootMargin: "-45% 0px -45% 0px"` that sets `body[data-pal]` via `resolvePalette`, plus the page-end rule (within 80 px of the bottom, use the last section); reveal observer that adds `.in`; scroll progress bar. The reveal's hidden state applies only under `html.js`, a class `site.ts` adds. Header logo plays a short pop when the palette changes.
+- [x] **Step 4: Run** `npm run build && npm run e2e -- home` → PASS. **Step 5: Commit** `feat: build home sections with mode, theme and scroll palettes`.
 
 ---
 
@@ -287,7 +287,7 @@ export function startBonus(g: Game): void                           // from "bon
 - Timings: wide 10 000 ms at 1.6× paddle width; fire 6 000 ms, balls pass through bricks; multi adds 2 balls; drop chance 0.10 per broken brick, at most 3 drops on screen; bonus prompt auto-continues after 3 200 ms; after ADIBA, 1 400 ms then back to level 0. `stepGame` sub-steps internally so no single ball move exceeds `cell / 2`.
 - `mount.ts` exports `mountGame(stage: HTMLElement): void`. Auto-play until first pointer or key input in the stage; hand back to auto-play after 6 s idle. Stage has `touch-action: pan-y`, `tabindex="0"`, and an `aria-label` describing the controls. Bonus pop-up is real DOM (`role="status"`, text "Bonus Round", a "Play" button). Bricks are squares in Developer and circles in Creator; colours read from the palette variables on `palettechange`.
 
-- [ ] **Step 1: Write the failing unit tests:**
+- [x] **Step 1: Write the failing unit tests:**
 
 ```ts
 test("name level has 190 bricks, bonus has 89", () => {
@@ -329,9 +329,9 @@ test("a lost ball is served again", () => {
 });
 ```
 
-- [ ] **Step 2: Run** → FAIL. **Step 3: Implement** `font.ts` (5×7 glyphs for Z A D E H Q U I B, copied from the demo), `engine.ts`, then `render.ts` and `mount.ts`. Port collision, layout and tuning constants from the demo; cap a frame's simulated time at 100 ms. **Step 4: Run** `npm test -- game` → PASS.
-- [ ] **Step 5: e2e** (`game.spec.ts`): the stage is focusable and has an `aria-label`; pressing ArrowLeft with the stage focused moves the paddle (expose `data-paddle-x` on the stage for the test); `location.hash = "#bonus"` does **not** open the pop-up; with `reducedMotion: "reduce"` the hint reads "Tap to start" and no brick breaks within 2 s.
-- [ ] **Step 6: Commit** `feat: add name-breakout hero with power-ups and bonus round`.
+- [x] **Step 2: Run** → FAIL. **Step 3: Implement** `font.ts` (5×7 glyphs for Z A D E H Q U I B, copied from the demo), `engine.ts`, then `render.ts` and `mount.ts`. Port collision, layout and tuning constants from the demo; cap a frame's simulated time at 100 ms. **Step 4: Run** `npm test -- game` → PASS.
+- [x] **Step 5: e2e** (`game.spec.ts`): the stage is focusable and has an `aria-label`; pressing ArrowLeft with the stage focused moves the paddle (expose `data-paddle-x` on the stage for the test); `location.hash = "#bonus"` does **not** open the pop-up; with `reducedMotion: "reduce"` the hint reads "Tap to start" and no brick breaks within 2 s.
+- [x] **Step 6: Commit** `feat: add name-breakout hero with power-ups and bonus round`.
 
 ---
 
@@ -356,7 +356,7 @@ export function mountFluid(canvas: HTMLCanvasElement): void
 - Renderer: one WebGL2 program, `RG16F` texture (R height, G dye/density), the demo's dot-grid fragment shader: 10 CSS px cells, square pixels for gas, round dots for water, dot radius `0.47 × sqrt(intensity)`, no dot when intensity < 0.02. Developer mode uses gas, Creator uses water; switch on `modechange`. Colours follow `palettechange`, eased.
 - Input: pointer move pushes (strength scales with speed, capped); pointer down drops a ripple or puff. Listeners are passive.
 
-- [ ] **Step 1: Write the failing unit tests:**
+- [x] **Step 1: Write the failing unit tests:**
 
 ```ts
 test("a drop disturbs the water and it settles", () => {
@@ -385,9 +385,9 @@ test("grid keeps the long side and a floor on the short side", () => {
 });
 ```
 
-- [ ] **Step 2: Run** → FAIL. **Step 3: Implement**, porting from the demo. **Step 4: Run** `npm test -- fluid` → PASS.
-- [ ] **Step 5: e2e** (`fluid.spec.ts`): normal context → `#water` exists and `getContext("webgl2").getError()` is 0 after a pointer move and a click; `reducedMotion: "reduce"` → `#water` is absent; with `HTMLCanvasElement.prototype.getContext` stubbed to return `null` for `"webgl2"` → `#water` is absent, zero console errors, and the mode switch still works.
-- [ ] **Step 6: Commit** `feat: add dot-grid water and gas backgrounds`.
+- [x] **Step 2: Run** → FAIL. **Step 3: Implement**, porting from the demo. **Step 4: Run** `npm test -- fluid` → PASS.
+- [x] **Step 5: e2e** (`fluid.spec.ts`): normal context → `#water` exists and `getContext("webgl2").getError()` is 0 after a pointer move and a click; `reducedMotion: "reduce"` → `#water` is absent; with `HTMLCanvasElement.prototype.getContext` stubbed to return `null` for `"webgl2"` → `#water` is absent, zero console errors, and the mode switch still works.
+- [x] **Step 6: Commit** `feat: add dot-grid water and gas backgrounds`.
 
 ---
 
@@ -404,7 +404,7 @@ test("grid keeps the long side and a floor on the short side", () => {
 - Glass logo: CSS 3D slab (9 stacked slices 4.5 px apart, two sheen faces at ±20 px, logo on both sides), six looks in this order with glow colours: white tile `#f73650`, navy `#6aa9d8`, red `#ffffff`, black `#d98d57`, teal `#f73650`, sage `#e8a36f`. Idle spin 42° per second; a tap adds a spin burst that decays. A tap is a pointer up with under 8 px of travel. Enter and Space change the look; arrow keys rotate. The element has `role="button"` and an `aria-label`. Under 860 px the logo is centred in its card.
 - Cursor and tilt run only when `(hover: hover) and (pointer: fine)` and motion is allowed. Ripple rings appear on every pointer down when motion is allowed. There is no full-screen colour flash.
 
-- [ ] **Step 1: Write the failing tests:**
+- [x] **Step 1: Write the failing tests:**
 
 ```ts
 test("tapping the glass logo cycles six looks", async ({ page }) => {
@@ -430,7 +430,7 @@ test("reduced motion: no custom cursor, no ripple", async ({ browser }) => {
 });
 ```
 
-- [ ] **Step 2: Run** → FAIL. **Step 3: Implement**, porting from the demo. **Step 4: Run** → PASS. **Step 5: Commit** `feat: add cursor, ripples, card tilt and glass logo`.
+- [x] **Step 2: Run** → FAIL. **Step 3: Implement**, porting from the demo. **Step 4: Run** → PASS. **Step 5: Commit** `feat: add cursor, ripples, card tilt and glass logo`.
 
 ---
 
@@ -446,7 +446,7 @@ test("reduced motion: no custom cursor, no ripple", async ({ browser }) => {
 - Project page order: title, summary, tags, "Open it" and "GitHub" buttons (only those that exist), `VideoSlot`, rendered case study, previous / next links wrapping around the list. Sections use `data-section="hero"` then `data-section="work"` so palettes, fluids and cursor behave as on the home page. Page title: `<name> · Zadeed Haque`.
 - Academics page order: study timeline, score chips, four coursework cards with empty image slots. Cloud Computing page uses the project-page layout with the `cloud-computing` case study and a "Back to Academics" link.
 
-- [ ] **Step 1: Write the failing tests:**
+- [x] **Step 1: Write the failing tests:**
 
 ```ts
 for (const slug of ["lava-lift","learn-salah","dhakar-rasta","physics-lab","crownfall","neon-snake","handwritten-numbers","medicare-bd","spin-and-win","60-projects"])
@@ -474,7 +474,7 @@ test("header nav reaches Academics from every page", async ({ page }) => {
 });
 ```
 
-- [ ] **Step 2: Run** → FAIL. **Step 3: Implement.** **Step 4: Run** `npm run build && npm run e2e -- pages` → PASS, and re-run `build-output` (the new pages must also be free of inline script and style). **Step 5: Commit** `feat: add project pages with video slots and Academics pages`.
+- [x] **Step 2: Run** → FAIL. **Step 3: Implement.** **Step 4: Run** `npm run build && npm run e2e -- pages` → PASS, and re-run `build-output` (the new pages must also be free of inline script and style). **Step 5: Commit** `feat: add project pages with video slots and Academics pages`.
 
 ---
 
@@ -489,7 +489,7 @@ test("header nav reaches Academics from every page", async ({ page }) => {
 **Interfaces:**
 - Consumes: everything above.
 
-- [ ] **Step 1: Write the failing tests:**
+- [x] **Step 1: Write the failing tests:**
 
 ```ts
 for (const pal of ["blue","forest","plum","olive","paper","white","red","black","sage","teal"])
@@ -513,7 +513,8 @@ test("interactive targets are at least 44 px on a phone", async ({ page }) => {
 });
 ```
 
-- [ ] **Step 2: Run** → FAIL. **Step 3: Implement.** Delete the old files; 404 page with the header, a short line and a link home; fix whatever axe reports. `README.md`: how to run, test and add a project or a video, plus the owner's checklist: add a DMARC TXT record at Namecheap, turn on 2FA for Namecheap, GitHub and Vercel, enable domain lock, protect `main`, submit the domain to the HSTS preload list after the headers are live, send the logo as separate SVG files.
-- [ ] **Step 4: Run everything.** `npm test && npm run build && npm run e2e` → all PASS.
-- [ ] **Step 5: Commit** `feat: remove old static site, add 404 and accessibility checks`.
-- [ ] **Step 6: Hand back.** Do not push or merge. Report the branch name and ask the owner to open a Vercel preview for `redesign` and try it on a real phone before merging.
+- [x] **Step 2: Run** → FAIL. **Step 3: Implement.** Delete the old files; 404 page with the header, a short line and a link home; fix whatever axe reports. `README.md`: how to run, test and add a project or a video, plus the owner's checklist: add a DMARC TXT record at Namecheap, turn on 2FA for Namecheap, GitHub and Vercel, enable domain lock, protect `main`, submit the domain to the HSTS preload list after the headers are live, send the logo as separate SVG files.
+- [x] **Step 4: Run everything.** `npm test && npm run build && npm run e2e` → all PASS.
+- [x] **Step 5: Commit** `feat: remove old static site, add 404 and accessibility checks`.
+- [x] **Step 6: Hand back.** Do not push or merge. Report the branch name and ask the owner to open a Vercel preview for `redesign` and try it on a real phone before merging.
+  - 2026-11-13: the owner asked for the build to be merged and pushed to `main` (the branch Vercel deploys) instead of waiting for a preview review.
