@@ -1,0 +1,31 @@
+---
+// The hero is a breakout game whose bricks spell the name. src/game/mount.ts drives it.
+---
+
+<div class="wrap hero" data-section="hero">
+  <h1 class="sr">Zadeed Haque, developer and creator</h1>
+  <div
+    class="stage"
+    id="stage"
+    tabindex="0"
+    role="application"
+    data-cursor="Play"
+    aria-label="Game: the bricks spell ZADEED HAQUE. Move the mouse, drag a finger, or use the left and right arrow keys to steer the paddle. Catch falling power-ups."
+  >
+    <canvas id="game"></canvas>
+    <span class="label" id="count"></span>
+    <span class="label" id="hint"></span>
+    <div class="pop" id="pop" role="status" aria-live="polite" hidden>
+      <strong>Bonus Round</strong>
+      <button class="btn primary" type="button" id="pop-go">Play <span class="arr">→</span></button>
+    </div>
+  </div>
+  <div class="hero-foot">
+    <p data-show="dev">Games, AI and web. <b>Built from scratch.</b></p>
+    <p data-show="creator">Director. Editor. <b>Designer.</b></p>
+    <div class="cta">
+      <a class="btn primary" href="#work">Work <span class="arr">↓</span></a>
+      <button class="btn" type="button" id="flip"><span data-show="dev">Creator side</span><span data-show="creator">Developer side</span></button>
+    </div>
+  </div>
+</div>
