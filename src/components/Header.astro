@@ -1,0 +1,20 @@
+---
+import Logo from "./Logo.astro";
+---
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label="Zadeed Haque, home"><Logo id="mark" /><span>Zadeed Haque</span></a>
+    <nav aria-label="Main">
+      <a href="/#work">Work</a>
+      <a href="/#about">About</a>
+      <a href="/academics">Academics</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+    <div class="switch" role="group" aria-label="Site mode">
+      <button type="button" data-set="dev" aria-pressed="true">Developer</button>
+      <button type="button" data-set="creator" aria-pressed="false">Creator</button>
+    </div>
+    <button type="button" id="theme" aria-label="Colour theme: auto. Press to change."><i aria-hidden="true">◐</i><span>Auto</span></button>
+  </div>
+</header>
