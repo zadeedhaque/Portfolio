@@ -74,7 +74,7 @@ export function mountFluid(canvas: HTMLCanvasElement): void {
         if (sim.kind === "gas") {
           const fx = clamp((dx / innerWidth) * sim.f.w * 0.35, -2.5, 2.5), fy = clamp((dy / innerHeight) * sim.f.h * 0.35, -2.5, 2.5);
           sim.f.puff(gx, gy, 4, fx / n, fy / n, 0.28 * push, 0);
-        } else sim.f.drop(gx, gy, 3.2, 0.5 * push, 0.16 * push);
+        } else sim.f.drop(gx, gy, 5, 0.6 * push, 0.24 * push);
       }
       lx = e.clientX;
       ly = e.clientY;
@@ -86,7 +86,7 @@ export function mountFluid(canvas: HTMLCanvasElement): void {
     (e) => {
       const [gx, gy] = toGrid(e.clientX, e.clientY);
       if (sim.kind === "gas") sim.f.puff(gx, gy, 8, 0, 0, 1.3, 2.2);
-      else sim.f.drop(gx, gy, 6.5, 3.2, 0.9);
+      else sim.f.drop(gx, gy, 10, 3.6, 1);
       lx = e.clientX;
       ly = e.clientY;
     },

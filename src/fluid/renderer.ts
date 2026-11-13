@@ -26,7 +26,7 @@ void main() {
     vec3 L = normalize(vec3(-.45, -.55, .7));
     float shade = dot(n, L) - L.z;                                  // 0 on still water
     float spec = pow(max(dot(reflect(-L, n), vec3(0., 0., 1.)), 0.), 48.);
-    I = clamp(abs(shade) * 2.2 + spec + dye * .7, 0., 1.);
+    I = clamp(abs(shade) * 3.4 + spec + dye * .95, 0., 1.);        // heavy gain: thick water reads as fat dots
     dotc = mix(ac, hi, clamp(shade * 2.5 + spec, 0., 1.) * .7);
   }
   float r = .47 * sqrt(I);

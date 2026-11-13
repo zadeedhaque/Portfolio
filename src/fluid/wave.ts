@@ -10,8 +10,10 @@ export interface Field {
   readonly dye: Float32Array;
 }
 
-const DAMPING = 0.986;
-const DYE_FADE = 0.991;
+// Tuned thick, like syrup: waves travel slower, lose energy faster, and the dye lingers.
+const WAVE_SPEED = 0.3; // c² in grid units; 0.5 is the fastest stable value
+const DAMPING = 0.976;
+const DYE_FADE = 0.994;
 
 export function createWave(w: number, h: number): Field & { step(): void; drop(gx: number, gy: number, radius: number, amp: number, ink: number): void } {
   let a = new Float32Array(w * h); // current height
@@ -26,7 +28,8 @@ export function createWave(w: number, h: number): Field & { step(): void; drop(g
     step() {
       for (let y = 1; y < h - 1; y++)
         for (let x = 1, i = y * w + 1; x < w - 1; x++, i++) {
-          b[i] = ((a[i - 1]! + a[i + 1]! + a[i - w]! + a[i + w]!) * 0.5 - b[i]!) * DAMPING; // wave equation + damping
+          const lap = a[i - 1]! + a[i + 1]! + a[i - w]! + a[i + w]! - 4 * a[i]!;
+          b[i] = (2 * a[i]! - b[i]! + WAVE_SPEED * lap) * DAMPING; // wave equation + damping
           dye2[i] = (dye[i]! * 4 + dye[i - 1]! + dye[i + 1]! + dye[i - w]! + dye[i + w]!) * 0.125 * DYE_FADE; // diffuse + fade
         }
       [a, b] = [b, a];
