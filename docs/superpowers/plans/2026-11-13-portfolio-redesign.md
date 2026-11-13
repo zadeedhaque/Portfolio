@@ -74,7 +74,7 @@ tests/unit/*.test.ts, tests/e2e/*.spec.ts
 - Produces: `Base.astro` props `{ title: string; description: string }`, rendering `<body data-pal="blue">` and `<html data-mode="dev" data-theme="auto">`. `Logo.astro` props `{ size?: number; id?: string }`. npm scripts: `dev`, `build`, `preview`, `test` (vitest run), `e2e` (playwright against `astro preview` on port 4321).
 - Produces CSS custom properties on `body[data-pal=…]`: `--bg --surface --line --text --muted --accent --accent-text --on-accent --lx --ly`. Palette names: `blue forest plum olive paper white red black sage teal`. Copy every value from the demo's `body[data-pal="…"]` rules.
 
-- [ ] **Step 1: Scaffold.** Create an empty Astro project in the repo root with TypeScript strict; add Vitest, Playwright, `@axe-core/playwright`, the two fontsource packages. Copy `D:\Claude\Projects\portfolio-demo\assets\logo-sheet.webp` to `public/`. Leave the old `*.html`, `css/`, `js/` files in place for now; Task 9 removes them. Old root `*.html` files are not inside `src/`, so they do not affect the build.
+- [ ] **Step 1: Scaffold.** Create an empty Astro project in the repo root with TypeScript strict; add Vitest, Playwright, `@axe-core/playwright`, the two fontsource packages. Copy `docs/superpowers/reference/demo/assets/logo-sheet.webp` to `public/`. Leave the old `*.html`, `css/`, `js/` files in place for now; Task 9 removes them. Old root `*.html` files are not inside `src/`, so they do not affect the build.
 
 - [ ] **Step 2: Write the failing build-output test** (`tests/e2e/build-output.spec.ts`, reads `dist/` from disk, no browser):
 
