@@ -13,7 +13,7 @@ import { roles } from "../data/roles";
     <div class="grid" data-show="dev">
       {
         projects.map((p, i) => (
-          <Card name={p.name} summary={p.summary} tags={p.tags} href={`/work/${p.slug}`} primary={p.play ? { label: "Open", url: p.play } : undefined} code={p.code} delay={i % 3} />
+          <Card name={p.name} summary={p.summary} tags={p.tags} href={`/work/${p.slug}`} primary={p.play ? { label: "Open", url: p.play } : undefined} code={p.code} delay={i % 3} video={p.video} poster={p.poster} />
         ))
       }
     </div>

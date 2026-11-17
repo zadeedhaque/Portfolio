@@ -53,3 +53,44 @@ test("with JavaScript off, Developer content is visible", async ({ browser }) =>
   await expect(page.locator('[data-show="creator"] .card').first()).toBeHidden();
   await context.close();
 });
+
+test("Developer cards show their video posters", async ({ page }) => {
+  await page.goto("/");
+  const posters = page.locator('[data-show="dev"] .card .slot.media img');
+  await expect(posters).toHaveCount(8);
+  for (const img of await posters.all()) {
+    await img.scrollIntoViewIfNeeded();
+    await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth)).toBe(1280);
+  }
+});
+
+test("hovering a card plays its demo video, leaving pauses it", async ({ page }) => {
+  await page.goto("/");
+  const card = page.locator('[data-show="dev"] .card').first();
+  const video = card.locator("video");
+  await expect(video).not.toHaveAttribute("src", /.+/);   // nothing downloaded before it is wanted
+  await card.scrollIntoViewIfNeeded();
+  await card.hover();
+  await expect.poll(() => video.evaluate((v: HTMLVideoElement) => v.currentTime)).toBeGreaterThan(0.3);
+  await expect(card.locator(".slot.media")).toHaveClass(/playing/);
+  await page.mouse.move(2, 2);
+  await expect(card.locator(".slot.media")).not.toHaveClass(/playing/);
+});
+
+test("on a phone the card in view plays", async ({ browser }) => {
+  const page = await (await browser.newContext({ viewport: { width: 375, height: 812 }, hasTouch: true, isMobile: true })).newPage();
+  await page.goto("/");
+  const slot = page.locator('[data-show="dev"] .card .slot.media').nth(1);
+  await slot.scrollIntoViewIfNeeded();
+  await expect.poll(() => slot.locator("video").evaluate((v: HTMLVideoElement) => v.currentTime), { timeout: 8000 }).toBeGreaterThan(0.3);
+});
+
+test("reduced motion: card videos never autoplay", async ({ browser }) => {
+  const page = await (await browser.newContext({ reducedMotion: "reduce" })).newPage();
+  await page.goto("/");
+  const card = page.locator('[data-show="dev"] .card').first();
+  await card.scrollIntoViewIfNeeded();
+  await card.hover();
+  await page.waitForTimeout(800);
+  await expect(card.locator("video")).not.toHaveAttribute("src", /.+/);
+});

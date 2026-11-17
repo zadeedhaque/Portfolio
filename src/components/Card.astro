@@ -11,12 +11,25 @@ interface Props {
   code?: string;
   /** Reveal stagger step, 0 to 2. */
   delay?: number;
+  /** Demo video and its poster (paths under public/). The poster fills the image slot; the
+      video loads only when the card is hovered or scrolled into view (see cardVideo.ts). */
+  video?: string;
+  poster?: string;
 }
-const { name, summary, tags, href, primary, code, delay = 0 } = Astro.props;
+const { name, summary, tags, href, primary, code, delay = 0, video, poster } = Astro.props;
 ---
 
 <article class:list={["card", "rv", `d${delay}`]}>
-  <div class="slot"></div>
+  {
+    poster ? (
+      <a class="slot media" href={href} tabindex="-1" aria-hidden="true">
+        <img src={poster} alt="" width="1280" height="720" loading="lazy" decoding="async" />
+        {video && <video muted loop playsinline preload="none" data-src={video} />}
+      </a>
+    ) : (
+      <div class="slot" />
+    )
+  }
   <h3>{href ? <a href={href}>{name}</a> : name}</h3>
   <p>{summary}</p>
   {tags.length > 0 && <ul class="chips">{tags.map((t) => <li>{t}</li>)}</ul>}

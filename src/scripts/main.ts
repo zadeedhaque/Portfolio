@@ -7,6 +7,7 @@ import { initGlass } from "./glass";
 import { initRipple } from "./ripple";
 import { initSite } from "./site";
 import { initTilt } from "./tilt";
+import { initCardVideo } from "./cardVideo";
 
 // Fade the loading cover as soon as the page has really loaded. If the CSS
 // fallback already hid it, leave it alone so it does not flash back.
@@ -21,6 +22,7 @@ initSite();
 initCursor();
 initRipple();
 initTilt();
+initCardVideo();
 initGlass();
 
 const stage = document.getElementById("stage");
