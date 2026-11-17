@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const withVideo = ["lava-lift", "learn-salah", "dhakar-rasta", "physics-lab", "crownfall", "neon-snake", "handwritten-numbers", "spin-and-win"];
+const withVideo = ["lava-lift", "learn-salah", "dhakar-rasta", "physics-lab", "ssc-physics", "crownfall", "neon-snake", "handwritten-numbers", "spin-and-win"];
 const withoutVideo = ["medicare-bd", "60-projects"];
 
 for (const slug of [...withVideo, ...withoutVideo])

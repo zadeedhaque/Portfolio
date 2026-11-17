@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-test("Developer shows 10 cards, Creator shows 7", async ({ page }) => {
+test("Developer shows 11 cards, Creator shows 7", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator('[data-show="dev"] .card:visible')).toHaveCount(10);
+  await expect(page.locator('[data-show="dev"] .card:visible')).toHaveCount(11);
   await page.getByRole("button", { name: "Creator", exact: true }).click();
   await expect(page.locator('[data-show="creator"] .card:visible')).toHaveCount(7);
   await expect(page.locator('[data-show="dev"] .card:visible')).toHaveCount(0);
@@ -57,7 +57,7 @@ test("with JavaScript off, Developer content is visible", async ({ browser }) =>
 test("Developer cards show their video posters", async ({ page }) => {
   await page.goto("/");
   const posters = page.locator('[data-show="dev"] .card .slot.media img');
-  await expect(posters).toHaveCount(8);
+  await expect(posters).toHaveCount(9);
   for (const img of await posters.all()) {
     await img.scrollIntoViewIfNeeded();
     await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth)).toBe(1280);

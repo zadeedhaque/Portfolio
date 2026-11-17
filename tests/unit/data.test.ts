@@ -4,16 +4,16 @@ import { coursework } from "../../src/data/academics";
 import { projects } from "../../src/data/projects";
 import { roles } from "../../src/data/roles";
 
-test("ten projects with unique slugs and https links", () => {
-  expect(projects).toHaveLength(10);
-  expect(new Set(projects.map((p) => p.slug)).size).toBe(10);
+test("eleven projects with unique slugs and https links", () => {
+  expect(projects).toHaveLength(11);
+  expect(new Set(projects.map((p) => p.slug)).size).toBe(11);
   for (const p of projects) for (const url of [p.play, p.code]) if (url) expect(url).toMatch(/^https:\/\//);
 });
 
 test("every video and poster a project names exists under public/", () => {
   for (const p of projects)
     for (const file of [p.video, p.poster]) if (file) expect(existsSync(`public${file}`), file).toBe(true);
-  expect(projects.filter((p) => p.video)).toHaveLength(8);
+  expect(projects.filter((p) => p.video)).toHaveLength(9);
 });
 
 test("every project has a case study file, plus cloud-computing", () => {
