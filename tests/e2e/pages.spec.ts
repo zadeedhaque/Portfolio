@@ -1,19 +1,32 @@
 import { expect, test } from "@playwright/test";
 
-const slugs = ["lava-lift", "learn-salah", "dhakar-rasta", "physics-lab", "crownfall", "neon-snake", "handwritten-numbers", "medicare-bd", "spin-and-win", "60-projects"];
+const withVideo = ["lava-lift", "learn-salah", "dhakar-rasta", "physics-lab", "crownfall", "neon-snake", "handwritten-numbers", "spin-and-win"];
+const withoutVideo = ["medicare-bd", "60-projects"];
 
-for (const slug of slugs)
-  test(`/work/${slug} has an empty video slot above the case study`, async ({ page }) => {
+for (const slug of [...withVideo, ...withoutVideo])
+  test(`/work/${slug} has its video area above the case study`, async ({ page, request }) => {
     expect((await page.goto(`/work/${slug}`))!.status()).toBe(200);
     await expect(page).toHaveTitle(/ · Zadeed Haque$/);
-    const slot = page.getByLabel(/Video demo of .* coming soon/);
-    await expect(slot).toBeVisible();
-    await expect(page.locator("video")).toHaveCount(0);
+    const hasVideo = withVideo.includes(slug);
+    const area = hasVideo ? page.locator("video") : page.getByLabel(/Video demo of .* coming soon/);
+    await expect(area).toBeVisible();
+    await expect(page.locator("video")).toHaveCount(hasVideo ? 1 : 0);
+    if (hasVideo) {
+      await expect(page.locator("video")).toHaveAttribute("poster", `/media/${slug}.jpg`);
+      for (const file of [`/media/${slug}.mp4`, `/media/${slug}.jpg`]) expect((await request.get(file)).status(), file).toBe(200);
+    }
     await expect(page.locator("article img, article svg")).toHaveCount(0);
-    expect((await slot.boundingBox())!.y).toBeLessThan((await page.locator("article h2").first().boundingBox())!.y);
+    expect((await area.boundingBox())!.y).toBeLessThan((await page.locator("article h2").first().boundingBox())!.y);
     await expect(page.getByRole("link", { name: /Next/ })).toBeVisible();
     await expect(page.getByRole("link", { name: /Previous/ })).toBeVisible();
   });
+
+test("a demo video plays", async ({ page }) => {
+  await page.goto("/work/lava-lift");
+  const ok = await page.locator("video").evaluate(async (v: HTMLVideoElement) => { await v.play(); await new Promise((r) => setTimeout(r, 800)); return { time: v.currentTime, w: v.videoWidth, h: v.videoHeight }; });
+  expect(ok.time).toBeGreaterThan(0.3);
+  expect([ok.w, ok.h]).toEqual([1280, 720]);
+});
 
 test("previous / next wrap around the project list", async ({ page }) => {
   await page.goto("/work/60-projects");

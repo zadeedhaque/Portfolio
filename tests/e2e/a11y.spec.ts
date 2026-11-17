@@ -36,7 +36,8 @@ for (const path of ["/", "/work/lava-lift", "/work/crownfall", "/academics", "/a
 
 test("no leftover files or images from the old site", () => {
   for (const gone of ["index.html", "work.html", "academics.html", "hobbies.html", "contact.html", "cloud-computing.html", "css", "js", "assets", "source-art", "videos"]) expect(existsSync(gone), gone).toBe(false);
-  expect(filesUnder("dist").filter((f) => /\.(jpe?g|png)$/i.test(f))).toEqual([]);
+  // Only the demo video posters in media/ are allowed; no old-site photos.
+  expect(filesUnder("dist").filter((f) => /\.(jpe?g|png)$/i.test(f) && !/[\\/]media[\\/][\w-]+\.jpg$/.test(f))).toEqual([]);
 });
 
 test("interactive targets are at least 44 px on a phone", async ({ page }) => {
