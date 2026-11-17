@@ -19,7 +19,7 @@ interface Props {
 const { name, summary, tags, href, primary, code, delay = 0, video, poster } = Astro.props;
 ---
 
-<article class:list={["card", "rv", `d${delay}`]}>
+<article class:list={["card", "rv", `d${delay}`]} data-href={href}>
   {
     poster ? (
       <a class="slot media" href={href} tabindex="-1" aria-hidden="true">

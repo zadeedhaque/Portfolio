@@ -94,3 +94,40 @@ test("reduced motion: card videos never autoplay", async ({ browser }) => {
   await page.waitForTimeout(800);
   await expect(card.locator("video")).not.toHaveAttribute("src", /.+/);
 });
+
+for (const part of [".slot", "h3", "p", ".chips"])
+  test(`one click on a card's ${part} opens the project page`, async ({ page }) => {
+    await page.goto("/");
+    const card = page.locator('[data-show="dev"] .card').first();
+    await card.scrollIntoViewIfNeeded();
+    await card.locator(part).first().click();
+    await expect(page).toHaveURL(/\/work\/lava-lift\/?$/);
+  });
+
+for (const part of [".slot", "p"])
+  test(`one tap on a card's ${part} opens the project page on a phone`, async ({ browser }) => {
+    const page = await (await browser.newContext({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true })).newPage();
+    await page.goto("/");
+    const card = page.locator('[data-show="dev"] .card').nth(1);
+    await card.scrollIntoViewIfNeeded();
+    await card.locator(part).first().tap();
+    await expect(page).toHaveURL(/\/work\/learn-salah\/?$/);
+  });
+
+test("a card's Open link still goes to the live site, not the project page", async ({ page, context }) => {
+  await page.goto("/");
+  const card = page.locator('[data-show="dev"] .card').first();
+  await card.scrollIntoViewIfNeeded();
+  const [popup] = await Promise.all([context.waitForEvent("page"), card.getByRole("link", { name: /Open Lava Lift/ }).click()]);
+  expect(popup.url()).toContain("lava-lift");
+  expect(new URL(page.url()).pathname).toBe("/");
+});
+
+test("Ctrl+click on a card opens the project in a new tab", async ({ page, context }) => {
+  await page.goto("/");
+  const card = page.locator('[data-show="dev"] .card').first();
+  await card.scrollIntoViewIfNeeded();
+  const [tab] = await Promise.all([context.waitForEvent("page"), card.locator("p").click({ modifiers: ["Control"] })]);
+  await expect(tab).toHaveURL(/\/work\/lava-lift\/?$/);
+  expect(new URL(page.url()).pathname).toBe("/");
+});

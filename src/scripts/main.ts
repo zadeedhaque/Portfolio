@@ -8,6 +8,7 @@ import { initRipple } from "./ripple";
 import { initSite } from "./site";
 import { initTilt } from "./tilt";
 import { initCardVideo } from "./cardVideo";
+import { initCardLink } from "./cardLink";
 
 // Fade the loading cover as soon as the page has really loaded. If the CSS
 // fallback already hid it, leave it alone so it does not flash back.
@@ -23,6 +24,7 @@ initCursor();
 initRipple();
 initTilt();
 initCardVideo();
+initCardLink();
 initGlass();
 
 const stage = document.getElementById("stage");
