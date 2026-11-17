@@ -16,13 +16,15 @@ export const creatorTimeline: TimelineRow[] = [
 ];
 
 /** Full study timeline on the Academics page. */
-export const study: { when: string; school: string; detail: string }[] = [
-  { when: "Now – 2027", school: "Swinburne University of Technology", detail: "Bachelor of Computer Science · AI major" },
-  { when: "2024 – 2025", school: "BRAC University", detail: "Computer Science & Engineering · CGPA 3.64 / 4.00 · credit transferred" },
-  { when: "2022 – 2023", school: "Rajuk Uttara Model College", detail: "Higher Secondary Certificate · GPA 5.00 / 5.00" },
+/** `logo` is a path under public/. The logos are drawn for dark backgrounds, so the page sets them on a dark tile. */
+export const study: { when: string; school: string; detail: string; logo: string }[] = [
+  { when: "Now – 2027", school: "Swinburne University of Technology", detail: "Bachelor of Computer Science · AI major", logo: "/logos/swinburne.png" },
+  { when: "2024 – 2025", school: "BRAC University", detail: "Computer Science & Engineering · CGPA 3.64 / 4.00 · credit transferred", logo: "/logos/brac.png" },
+  { when: "2022 – 2023", school: "Rajuk Uttara Model College", detail: "Higher Secondary Certificate · GPA 5.00 / 5.00", logo: "/logos/rajuk.png" },
+  { when: "Certificate", school: "Creative IT Institute", detail: "Graphic Design · Adobe Illustrator", logo: "/logos/creative-it.png" },
 ];
 
-export const scores: string[] = ["IELTS 7.5", "SAT 1300", "Creative IT · Graphic Design"];
+export const scores: string[] = ["IELTS 7.5", "SAT 1300"];
 
 export const coursework: { name: string; summary: string; href?: string }[] = [
   { name: "Cloud Computing Architecture", summary: "One Photo Album app, built three ways on AWS: on EC2, highly available, then serverless.", href: "/academics/cloud-computing" },

@@ -12,8 +12,9 @@ import { coursework, scores, study } from "../../data/academics";
     <ol class="timeline rv d1">
       {
         study.map((row) => (
-          <li>
+          <li class="with-logo">
             <span class="label">{row.when}</span>
+            <span class="inst-logo"><img src={row.logo} alt={`${row.school} logo`} width="64" height="64" loading="lazy" decoding="async" /></span>
             <strong>{row.school}<small>{row.detail}</small></strong>
           </li>
         ))

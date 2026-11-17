@@ -67,3 +67,25 @@ test("header nav reaches home sections from other pages", async ({ page }) => {
   await expect(page).toHaveURL(/\/#work$/);
   await expect(page.locator("#work")).toBeInViewport();
 });
+
+test("academics shows each institute's logo", async ({ page }) => {
+  await page.goto("/academics");
+  for (const school of ["Swinburne University of Technology", "BRAC University", "Rajuk Uttara Model College", "Creative IT Institute"]) {
+    const logo = page.getByRole("img", { name: `${school} logo` });
+    await logo.scrollIntoViewIfNeeded();
+    await expect(logo).toBeVisible();
+    await expect.poll(() => logo.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+  }
+});
+
+for (const width of [375, 1280])
+  test(`academics logos sit in line with their rows at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/academics");
+    for (const row of await page.locator(".timeline li.with-logo").all()) {
+      const r = (await row.boundingBox())!, l = (await row.locator(".inst-logo").boundingBox())!;
+      expect(l.y).toBeGreaterThanOrEqual(r.y);
+      expect(l.y + l.height).toBeLessThanOrEqual(r.y + r.height + 1);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  });
